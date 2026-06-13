@@ -35,7 +35,6 @@
 </head>
 <body class="h-screen h-[100dvh] overflow-hidden flex flex-col">
 
-    <!-- LANDING VIEW -->
     <div id="view-landing" class="flex-1 overflow-y-auto flex flex-col bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-amber-950/20 via-zinc-950 to-black">
         <header class="w-full max-w-7xl mx-auto px-6 py-4 flex justify-between items-center border-b border-zinc-900/80 shrink-0">
             <div class="flex items-center gap-3">
@@ -67,7 +66,6 @@
                 </div>
             </div>
 
-            <!-- SIMULADOR SMARTPHONE 3D CON ALTO VOLTAJE -->
             <div class="flex justify-center items-center">
                 <div class="phone-mockup relative w-[310px] h-[600px] bg-zinc-950 rounded-[48px] border-[6px] border-zinc-800 p-3 flex flex-col justify-between overflow-hidden">
                     
@@ -86,14 +84,12 @@
                         </div>
 
                         <div class="flex-1 flex flex-col justify-start space-y-3 overflow-y-auto">
-                            <!-- Caso de Alta Tensión -->
                             <div class="bg-zinc-900 p-2.5 rounded-2xl rounded-tr-none text-[10.5px] text-zinc-300 self-end max-w-[90%] border border-zinc-800">
                                 <span class="text-[7px] text-zinc-500 font-bold block mb-0.5 uppercase">Texto analizado:</span>
                                 Me mandó una foto y me dijo: "¿Qué tal me veo hoy?". ¿Cómo respondo sin sonar aburrido?
                             </div>
 
                             <div id="demo-results" class="hidden space-y-2.5">
-                                <!-- Métricas -->
                                 <div class="bg-zinc-950 p-2 rounded-xl border border-zinc-900 space-y-1.5">
                                     <div class="grid grid-cols-2 gap-2">
                                         <div>
@@ -116,7 +112,6 @@
                                     </div>
                                 </div>
 
-                                <!-- Lectura Psicológica Cruda -->
                                 <div class="bg-zinc-900 border border-amber-500/20 p-3 rounded-xl shadow-lg">
                                     <span class="text-[9px] font-black text-amber-400 flex items-center gap-1 mb-1 uppercase tracking-wide">
                                         <i class="fa-solid fa-brain"></i> Lectura Psicológica
@@ -126,7 +121,6 @@
                                     </p>
                                 </div>
 
-                                <!-- Respuestas del Toque Original -->
                                 <div class="p-2 bg-zinc-950 rounded-xl border border-zinc-900 text-[9.5px] space-y-1">
                                     <span class="text-[7.5px] font-bold text-zinc-500 block uppercase">Filtros de Respuesta Sugeridos:</span>
                                     <p class="text-zinc-300 font-medium">• <span class="text-amber-400 font-bold">Coqueto 😏:</span> "Si te digo la verdad te lo vas a creer... pero un sólido 10/10."</p>
@@ -147,7 +141,6 @@
         </main>
     </div>
 
-    <!-- PANTALLAS LOGIN Y REGISTRO -->
     <div id="view-login" class="hidden flex-1 flex items-center justify-center px-4">
         <div class="w-full max-w-md glass-panel p-8 rounded-3xl shadow-2xl">
             <h2 class="text-3xl font-black mb-2">Bienvenido</h2>
@@ -176,7 +169,6 @@
         </div>
     </div>
 
-    <!-- PANEL DE LA APLICACIÓN COMPLETA -->
     <div id="view-app" class="hidden flex-1 flex h-full overflow-hidden">
         <aside class="w-64 bg-black border-r border-zinc-900 hidden md:flex flex-col p-4 justify-between">
             <div>
@@ -211,13 +203,30 @@
                     <p class="text-xs text-zinc-500">Relaciones • Ventas • Networking. Sube tu conversación y decodifica la psicología del chat.</p>
                 </div>
 
+                <div id="ai-loading-skeleton" class="hidden w-full max-w-3xl pt-4 animate-pulse space-y-4">
+                    <div class="flex gap-4 p-5 rounded-2xl bg-zinc-900/20 border border-zinc-900/60">
+                        <div class="w-10 h-10 bg-zinc-800 rounded-xl shrink-0 border border-zinc-700/30"></div>
+                        <div class="space-y-4 w-full">
+                            <div class="h-3 bg-zinc-800 rounded w-1/4"></div>
+                            <div class="space-y-2">
+                                <div class="h-3 bg-zinc-800 rounded w-3/4"></div>
+                                <div class="h-3 bg-zinc-800 rounded w-5/6"></div>
+                            </div>
+                            <div class="pt-2 space-y-2.5">
+                                <div class="h-12 bg-zinc-900 rounded-xl w-full"></div>
+                                <div class="h-12 bg-zinc-900 rounded-xl w-full"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div id="app-results" class="hidden w-full max-w-3xl space-y-6 pt-4">
                     <div class="flex gap-4 p-5 rounded-2xl bg-zinc-900/40 border border-zinc-900">
                         <img src="logo.png" class="w-10 h-10 rounded-xl shrink-0 border border-amber-500/20">
                         <div class="space-y-4 w-full">
                             <span class="text-[11px] font-bold text-amber-500 uppercase tracking-widest">Diagnóstico Core Oficial</span>
                             <div id="ai-metrics-container"></div>
-                            <div id="ai-response-content" class="text-sm text-zinc-200 leading-relaxed whitespace-pre-line break-words"></div>
+                            <div id="ai-response-content" class="space-y-4"></div>
                         </div>
                     </div>
                 </div>
@@ -236,6 +245,13 @@
                             <button onclick="setTono('misterioso')" id="btn-misterioso" class="tono-btn">🔮 Misterioso</button>
                             <button onclick="setTono('estrategico')" id="btn-estrategico" class="tono-btn">💼 Estratégico</button>
                         </div>
+                    </div>
+
+                    <div id="image-preview-box" class="hidden flex items-center gap-2 p-2 bg-zinc-900/80 rounded-xl border border-zinc-800 self-start relative">
+                        <img id="preview-img" class="w-14 h-14 object-cover rounded-lg border border-zinc-700">
+                        <button onclick="clearImagePreview()" class="absolute -top-1.5 -right-1.5 w-5 h-5 bg-zinc-800 text-zinc-400 hover:text-white hover:bg-zinc-700 rounded-full flex items-center justify-center text-[10px] border border-zinc-700">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
                     </div>
 
                     <textarea id="mensaje" rows="2" class="w-full bg-transparent p-1 text-sm text-white focus:outline-none placeholder-zinc-700 resize-none" placeholder="Añade contexto adicional o escribe el texto directamente aquí..."></textarea>
@@ -275,9 +291,25 @@
             document.getElementById('btn-' + t).classList.add('activo-gold');
         }
 
+        // CONTROLADOR DE VISTA PREVIA FLOTANTE
         document.getElementById('foto').onchange = function() {
-            if(this.files.length > 0) document.getElementById('file-status').innerText = "Imagen lista";
+            if(this.files.length > 0) {
+                const file = this.files[0];
+                document.getElementById('file-status').innerText = "Imagen lista";
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('preview-img').src = e.target.result;
+                    document.getElementById('image-preview-box').classList.remove('hidden');
+                }
+                reader.readAsDataURL(file);
+            }
         };
+
+        function clearImagePreview() {
+            document.getElementById('foto').value = "";
+            document.getElementById('image-preview-box').classList.add('hidden');
+            document.getElementById('file-status').innerText = "Adjuntar Captura";
+        }
 
         function runLiveDemo(btn) {
             btn.disabled = true;
@@ -292,6 +324,102 @@
             }, 2000);
         }
 
+        // PARSER DINÁMICO DE RESPUESTAS CON BOTÓN DE COPIAR INTEGRADO
+        function formatAndRenderResponse(text) {
+            const container = document.getElementById('ai-response-content');
+            container.innerHTML = ''; 
+
+            const lines = text.split('\n');
+            let htmlOutput = '';
+            let suggestionsHTML = '';
+            let inSuggestions = false;
+
+            lines.forEach(line => {
+                let trimmed = line.trim();
+                if (!trimmed) return;
+
+                if (trimmed.includes('🧠 LECTURA PSICOLÓGICA:')) {
+                    inSuggestions = false;
+                    let content = trimmed.replace(/.*?🧠 LECTURA PSICOLÓGICA:\s*/i, '');
+                    htmlOutput += `
+                        <div class="p-4 bg-zinc-900/50 border border-amber-500/10 rounded-xl">
+                            <span class="text-xs font-black text-amber-400 flex items-center gap-1.5 mb-1 uppercase tracking-wide">
+                                <i class="fa-solid fa-brain"></i> Lectura Psicológica
+                            </span>
+                            <p class="text-sm text-zinc-200 font-medium leading-relaxed">${content}</p>
+                        </div>`;
+                } else if (trimmed.includes('💡 ESTRATEGIA:')) {
+                    inSuggestions = false;
+                    let content = trimmed.replace(/.*?💡 ESTRATEGIA:\s*/i, '');
+                    htmlOutput += `
+                        <div class="p-4 bg-zinc-900/30 border border-zinc-900 rounded-xl">
+                            <span class="text-xs font-black text-zinc-400 flex items-center gap-1.5 mb-1 uppercase tracking-wide">
+                                <i class="fa-solid fa-lightbulb text-amber-500"></i> Estrategia Táctica
+                            </span>
+                            <p class="text-sm text-zinc-300 leading-relaxed">${content}</p>
+                        </div>`;
+                } else if (trimmed.includes('🚫 EVITA:')) {
+                    inSuggestions = false;
+                    let content = trimmed.replace(/.*?🚫 EVITA:\s*/i, '');
+                    htmlOutput += `
+                        <div class="p-4 bg-rose-950/10 border border-rose-500/20 rounded-xl">
+                            <span class="text-xs font-black text-rose-400 flex items-center gap-1.5 mb-1 uppercase tracking-wide">
+                                <i class="fa-solid fa-circle-xmark"></i> Lo que debes Evitar
+                            </span>
+                            <p class="text-sm text-zinc-300 leading-relaxed">${content}</p>
+                        </div>`;
+                } else if (trimmed.includes('✨ RESPUESTAS SUGERIDAS') || trimmed.includes('💬 COPIAR Y PEGAR')) {
+                    inSuggestions = true;
+                    suggestionsHTML += `
+                        <div class="pt-2 space-y-3">
+                            <span class="text-xs font-black text-zinc-500 block uppercase tracking-wider mb-1">
+                                <i class="fa-solid fa-copy text-amber-400/80"></i> Mensajes Listos para Enviar:
+                            </span>`;
+                } else if (inSuggestions || trimmed.startsWith('•') || trimmed.startsWith('-') || trimmed.startsWith('"') || /Opción \d:/.test(trimmed)) {
+                    let textToCopy = trimmed.replace(/^[•\-\s]+(Opción \d:\s*)?/i, '').trim();
+                    textToCopy = textToCopy.replace(/^["'\u201c\u201d]|["'\u201c\u201d]$/g, ''); 
+                    
+                    let displayLabel = trimmed.match(/^[•\-\s]*(Opción \d:)/i) ? trimmed.match(/^[•\-\s]*(Opción \d:)/i)[1] : "Sugerencia:";
+                    let displayCleanText = trimmed.replace(/^[•\-\s]+(Opción \d:\s*)?/i, '').replace(/^["']|["']$/g, '');
+
+                    suggestionsHTML += `
+                        <div class="group relative flex items-center justify-between p-3.5 bg-zinc-950 border border-zinc-900 rounded-xl hover:border-zinc-800 transition-all">
+                            <div class="pr-12 text-sm text-zinc-200 leading-relaxed font-medium">
+                                <span class="text-amber-500/90 font-black text-[10px] block mb-0.5 uppercase tracking-wide">${displayLabel}</span>
+                                "${displayCleanText}"
+                            </div>
+                            <button onclick="copyOptionText(this, \`${textToCopy.replace(/`/g, '\\`').replace(/\$/g, '\\$')}\`)" class="absolute right-3 top-1/2 -translate-y-1/2 p-2 bg-zinc-900 hover:bg-zinc-800 text-zinc-400 hover:text-amber-400 rounded-lg border border-zinc-800 transition-all flex items-center justify-center w-8 h-8 text-xs" title="Copiar mensaje">
+                                <i class="fa-regular fa-copy"></i>
+                            </button>
+                        </div>`;
+                } else {
+                    if (!inSuggestions) {
+                        htmlOutput += `<p class="text-sm text-zinc-400 leading-relaxed">${trimmed}</p>`;
+                    }
+                }
+            });
+
+            if (suggestionsHTML) {
+                suggestionsHTML += `</div>`;
+                htmlOutput += suggestionsHTML;
+            }
+
+            container.innerHTML = htmlOutput;
+        }
+
+        // ACCIÓN CLONAR TEXTO EN EL PORTAPAPELES
+        function copyOptionText(btn, text) {
+            navigator.clipboard.writeText(text).then(() => {
+                const icon = btn.querySelector('i');
+                icon.className = 'fa-solid fa-check text-emerald-400';
+                btn.classList.add('border-emerald-500/30', 'bg-emerald-950/20');
+                setTimeout(() => {
+                    icon.className = 'fa-regular fa-copy';
+                    btn.classList.remove('border-emerald-500/30', 'bg-emerald-950/20');
+                }, 2000);
+            }).catch(err => console.error("Fallo al copiar texto: ", err));
+        }
+
         async function executeProductionAnalysis() {
             const btn = document.getElementById('main-action-btn');
             const textContent = document.getElementById('mensaje').value;
@@ -300,7 +428,12 @@
             if(!textContent && !fileData) return alert("Escribe un mensaje o adjunta una captura de chat.");
 
             btn.disabled = true;
-            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> ESCANEANDO INTERACCIÓN...`;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> ESCANEANDO...`;
+
+            // ACTIVAR ANIMACIÓN SKELETON LOADER
+            document.getElementById('app-initial').classList.add('hidden');
+            document.getElementById('app-results').classList.add('hidden');
+            document.getElementById('ai-loading-skeleton').classList.remove('hidden');
 
             let payload = { mensaje: textContent, tono: tonoSeleccionado };
             if (fileData) {
@@ -322,14 +455,19 @@
                 });
                 const res = await req.json();
                 
-                document.getElementById('app-initial').classList.add('hidden');
+                // DESACTIVAR CARGA Y MOSTRAR CONTENIDO
+                document.getElementById('ai-loading-skeleton').classList.add('hidden');
                 document.getElementById('app-results').classList.remove('hidden');
 
                 document.getElementById('ai-metrics-container').innerHTML = '';
-                document.getElementById('ai-response-content').innerText = res.respuesta;
+                
+                // Formatear estructuradamente la respuesta
+                formatAndRenderResponse(res.respuesta);
 
             } catch(e) { 
                 alert("Enciende tu servidor backend en Render o local."); 
+                document.getElementById('ai-loading-skeleton').classList.add('hidden');
+                document.getElementById('app-initial').classList.remove('hidden');
             }
             document.getElementById('main-action-btn').disabled = false;
             document.getElementById('main-action-btn').innerHTML = `Ejecutar Análisis <i class="fa-solid fa-circle-nodes"></i>`;

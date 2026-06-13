@@ -11,10 +11,9 @@
         .gold-gradient { background: linear-gradient(135deg, #ffe066 0%, #f59e0b 100%); }
         .gold-text { background: linear-gradient(135deg, #ffe066 0%, #f59e0b 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .glass-panel { background: rgba(18, 18, 24, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.05); }
-        .tono-btn { font-size: 0.7rem; font-weight: 700; padding: 0.4rem 0.9rem; border-radius: 9999px; border: 1px solid #27272a; color: #71717a; transition: all 0.3s; cursor: pointer; }
+        .tono-btn { font-size: 0.65rem; font-weight: 700; padding: 0.35rem 0.75rem; border-radius: 9999px; border: 1px solid #27272a; color: #a1a1aa; transition: all 0.3s; cursor: pointer; white-space: nowrap; }
         .activo-gold { background: linear-gradient(135deg, #ffe066 0%, #f59e0b 100%); color: black !important; border: none; }
         
-        /* ✨ EFECTOS 3D Y ANIMACIONES PREMIUM PARA EL TELÉFONO */
         .phone-mockup {
             transform: perspective(1000px) rotateY(-8deg) rotateX(4deg);
             box-shadow: -20px 20px 50px rgba(0, 0, 0, 0.8), 0 0 40px rgba(245, 158, 11, 0.1);
@@ -31,6 +30,7 @@
             100% { top: 100%; opacity: 0; }
         }
         .scanner-line { animation: laser-scan 2s linear infinite; }
+        ::-webkit-scrollbar { display: none; }
     </style>
 </head>
 <body class="h-screen h-[100dvh] overflow-hidden flex flex-col">
@@ -51,13 +51,13 @@
             
             <div class="text-left space-y-6">
                 <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-zinc-900 border border-zinc-800 text-[10px] sm:text-xs font-semibold text-amber-400">
-                    <i class="fa-solid fa-bolt animate-pulse"></i> Inteligencia Artificial Psicológica de Vanguardia
+                    <i class="fa-solid fa-brain animate-pulse"></i> Análisis Conductual e Inteligencia Conversacional
                 </div>
                 <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-tight">
                     Descubre la intención real detrás de cada <span class="gold-text">Mensaje</span>
                 </h1>
                 <p class="text-zinc-400 text-sm sm:text-base lg:text-lg leading-relaxed max-w-xl">
-                    No vuelvas a adivinar qué quisieron decir. Nebula entrega un <strong class="text-white">análisis conversacional avanzado</strong> y <strong class="text-amber-400">respuestas estratégicas inteligentes</strong> en cuestión de segundos.
+                    No vuelvas a adivinar qué quisieron decir. Nebula entrega un <strong class="text-white">análisis conversacional avanzado</strong> y <strong class="text-amber-400">respuestas estratégicas inteligentes</strong> válidas para relaciones, ventas y networking en segundos.
                 </p>
                 <div class="pt-2">
                     <button onclick="showView('view-app')" class="gold-gradient text-black font-black px-8 py-4 rounded-xl shadow-xl shadow-amber-500/20 flex items-center gap-3 text-sm uppercase tracking-wider transition-transform hover:scale-105">
@@ -67,68 +67,72 @@
             </div>
 
             <div class="flex justify-center items-center">
-                <div class="phone-mockup relative w-[290px] h-[580px] bg-zinc-950 rounded-[48px] border-[6px] border-zinc-800 p-3 flex flex-col justify-between overflow-hidden">
+                <div class="phone-mockup relative w-[310px] h-[600px] bg-zinc-950 rounded-[48px] border-[6px] border-zinc-800 p-3 flex flex-col justify-between overflow-hidden">
                     
                     <div class="absolute top-2 left-1/2 -translate-x-1/2 w-28 h-4 bg-zinc-900 rounded-full z-30 flex items-center justify-between px-4">
                         <span class="w-1.5 h-1.5 rounded-full bg-zinc-800"></span>
                         <span class="w-2.5 h-1 bg-zinc-800 rounded-full"></span>
                     </div>
 
-                    <div class="flex-1 rounded-[38px] overflow-y-auto bg-black flex flex-col justify-between p-3 pt-6 relative no-scrollbar">
+                    <div class="flex-1 rounded-[38px] overflow-y-auto bg-black flex flex-col justify-between p-3 pt-6 relative">
                         
                         <div id="laser" class="hidden absolute left-0 right-0 h-1 bg-gradient-to-r from-transparent via-amber-400 to-transparent shadow-[0_0_15px_#f59e0b] z-20 scanner-line"></div>
 
                         <div class="flex items-center justify-between border-b border-zinc-900 pb-2 mb-2 shrink-0">
-                            <span class="text-[9px] font-black tracking-widest text-zinc-500 uppercase">Nebula Mobile</span>
-                            <span class="text-[8px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-1.5 py-0.5 rounded-full font-bold">LIVE</span>
+                            <span class="text-[9px] font-black tracking-widest text-zinc-500 uppercase">Engine v2.5-Flash</span>
+                            <span class="text-[8px] bg-amber-500/10 text-amber-400 border border-amber-500/20 px-1.5 py-0.5 rounded-full font-bold">READY</span>
                         </div>
 
                         <div class="flex-1 flex flex-col justify-start space-y-3 overflow-y-auto">
-                            <div class="bg-zinc-900 p-2.5 rounded-2xl rounded-tr-none text-[11px] text-zinc-300 self-end max-w-[85%] border border-zinc-800">
-                                <span class="text-[8px] text-zinc-500 font-bold block mb-0.5">CHAT DE ENTRADA:</span>
-                                "Vio mi mensaje a las 4 PM, no respondió y hoy subió una historia de fiesta."
+                            <div class="bg-zinc-900 p-2.5 rounded-2xl rounded-tr-none text-[10px] text-zinc-300 self-end max-w-[90%] border border-zinc-800">
+                                <span class="text-[7px] text-zinc-500 font-bold block mb-0.5 uppercase">Texto analizado:</span>
+                                "Revisó nuestra propuesta comercial a las 4 PM, no respondió y subió contenido de viaje a redes."
                             </div>
 
-                            <div id="demo-results" class="hidden space-y-2.5 animate-fade-in">
-                                <div class="grid grid-cols-2 gap-2 bg-zinc-950 p-2 rounded-xl border border-zinc-900">
-                                    <div>
-                                        <div class="flex justify-between text-[8px] font-black mb-0.5">
-                                            <span class="text-zinc-500">INTERÉS</span>
-                                            <span class="text-amber-400">35%</span>
+                            <div id="demo-results" class="hidden space-y-2.5">
+                                <div class="bg-zinc-950 p-2 rounded-xl border border-zinc-900 space-y-1.5">
+                                    <div class="grid grid-cols-2 gap-2">
+                                        <div>
+                                            <div class="flex justify-between text-[8px] font-black">
+                                                <span class="text-zinc-500">INTERÉS</span>
+                                                <span class="text-amber-400">35%</span>
+                                            </div>
+                                            <div class="w-full bg-zinc-900 h-1 rounded-full overflow-hidden"><div class="gold-gradient h-full w-[35%]"></div></div>
                                         </div>
-                                        <div class="w-full bg-zinc-900 h-1 rounded-full overflow-hidden">
-                                            <div class="gold-gradient h-full w-[35%]"></div>
+                                        <div>
+                                            <div class="flex justify-between text-[8px] font-black">
+                                                <span class="text-zinc-500">GHOSTING</span>
+                                                <span class="text-rose-500">75%</span>
+                                            </div>
+                                            <div class="w-full bg-zinc-900 h-1 rounded-full overflow-hidden"><div class="bg-gradient-to-r from-rose-600 to-orange-500 h-full w-[75%]"></div></div>
                                         </div>
                                     </div>
-                                    <div>
-                                        <div class="flex justify-between text-[8px] font-black mb-0.5">
-                                            <span class="text-zinc-500">GHOSTING</span>
-                                            <span class="text-rose-500">75%</span>
-                                        </div>
-                                        <div class="w-full bg-zinc-900 h-1 rounded-full overflow-hidden">
-                                            <div class="bg-gradient-to-r from-rose-600 to-orange-500 h-full w-[75%]"></div>
-                                        </div>
+                                    <div class="text-[7.5px] text-zinc-600 font-medium text-center border-t border-zinc-900/60 pt-1">
+                                        <i class="fa-solid fa-shield-halved text-amber-500/60"></i> Confianza Alta • Basado en 14 señales conductuales
                                     </div>
                                 </div>
 
-                                <div class="text-[10px] text-zinc-300 bg-zinc-900/60 p-2 rounded-xl border border-zinc-800/50 space-y-1">
-                                    <p><strong class="text-amber-500">🔮 VIBRA:</strong> Está jugando a medir fuerzas y retener atención externa.</p>
-                                    <p><strong class="text-emerald-400">💡 ACCIÓN:</strong> Aplica distanciamiento táctico absoluto.</p>
+                                <div class="bg-zinc-900 border border-amber-500/20 p-3 rounded-xl shadow-lg">
+                                    <span class="text-[9px] font-black text-amber-400 flex items-center gap-1 mb-1 uppercase tracking-wide">
+                                        <i class="fa-solid fa-brain"></i> Lectura Psicológica
+                                    </span>
+                                    <p class="text-[11px] text-zinc-200 leading-snug font-medium">
+                                        Está midiendo deliberadamente su nivel de urgencia y retiendo el control de la negociación externa.
+                                    </p>
                                 </div>
 
-                                <div class="p-2 bg-zinc-950 rounded-xl border border-zinc-900 text-[10px]">
-                                    <span class="text-[8px] font-bold text-zinc-500 block mb-1 uppercase">Respuestas recomendadas:</span>
-                                    <div class="space-y-0.5 text-zinc-400 font-medium">
-                                        <p>• <span class="text-amber-400">Gracioso:</span> "Veo que sobreviviste al fin del mundo."</p>
-                                        <p>• <span class="text-rose-400">Cortante:</span> "Se ve que la pasaste bien."</p>
-                                    </div>
+                                <div class="p-2 bg-zinc-950 rounded-xl border border-zinc-900 text-[9.5px] space-y-1">
+                                    <span class="text-[7.5px] font-bold text-zinc-500 block uppercase">3 Respuestas Estratégicas:</span>
+                                    <p class="text-zinc-300 font-medium">• <span class="text-amber-400 font-bold">Estratégico:</span> "Perfecto, quedo atento a cuando revises los números."</p>
+                                    <p class="text-zinc-400">• <span class="text-zinc-500">Seguro:</span> Dejar en visto y retomar el contacto en 48 horas.</p>
+                                    <p class="text-zinc-400">• <span class="text-zinc-500">Misterioso:</span> "Veo que las prioridades cambiaron. Éxitos."</p>
                                 </div>
                             </div>
                         </div>
 
                         <div class="pt-2 shrink-0">
-                            <button onclick="runLiveDemo(this)" class="w-full gold-gradient text-black font-black text-[10px] p-2.5 rounded-xl uppercase tracking-wider shadow-md shadow-amber-500/10 flex items-center justify-center gap-1.5 transition active:scale-95">
-                                <i class="fa-solid fa-wand-magic-sparkles"></i> Analizar Conversación
+                            <button onclick="runLiveDemo(this)" class="w-full gold-gradient text-black font-black text-[10px] p-2.5 rounded-xl uppercase tracking-wider shadow-md flex items-center justify-center gap-1.5">
+                                <i class="fa-solid fa-wand-magic-sparkles"></i> Simular Análisis Psicológico
                             </button>
                         </div>
                     </div>
@@ -185,18 +189,18 @@
 
         <main class="flex-1 bg-zinc-950 flex flex-col h-full">
             <header class="w-full border-b border-zinc-900 p-4 flex items-center justify-between bg-zinc-950/50 backdrop-blur-md">
-                <span class="text-[10px] uppercase font-bold tracking-widest text-zinc-500">Workspace / Motor Inteligente Gemini-1.5</span>
+                <span class="text-[10px] uppercase font-bold tracking-widest text-zinc-500">Workspace / Motor Inteligencia Híbrida</span>
                 <span class="text-[10px] px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center gap-1.5 font-bold uppercase">
-                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Servidor en Producción
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Servidor en Línea
                 </span>
             </header>
 
             <div class="flex-1 overflow-y-auto p-6 flex flex-col items-center">
                 <div id="app-initial" class="my-auto max-w-xl text-center flex flex-col items-center">
-                    <img src="logo.png" class="w-32 h-32 mb-6 rounded-2xl border border-zinc-800 shadow-2xl">
+                    <img src="logo.png" class="w-28 h-28 mb-6 rounded-2xl border border-zinc-800 shadow-2xl">
                     <h3 class="text-2xl font-black mb-2 tracking-tight">Ecosistema Analítico Nebula</h3>
-                    <p class="text-sm text-zinc-400 font-medium mb-1">Tu aliada para conquistar.</p>
-                    <p class="text-xs text-zinc-500">Conecta. Atrae. Enamora. Sube una captura completa y ejecutaremos el escaneo psicológico.</p>
+                    <p class="text-sm text-zinc-400 font-medium mb-1">Tu aliada de persuasión estratégica.</p>
+                    <p class="text-xs text-zinc-500">Relaciones • Ventas • Networking. Sube tu conversación y decodifica la psicología del chat.</p>
                 </div>
 
                 <div id="app-results" class="hidden w-full max-w-3xl space-y-6 pt-4">
@@ -211,23 +215,29 @@
                 </div>
             </div>
 
-            <div class="p-6 bg-gradient-to-t from-zinc-950 to-transparent">
-                <div class="max-w-3xl mx-auto glass-panel rounded-2xl p-3 flex flex-col gap-3 shadow-2xl">
-                    <div class="flex items-center justify-center gap-4 border-b border-zinc-900/50 pb-2">
-                        <span class="text-[10px] font-bold text-zinc-500 uppercase tracking-tighter">Modo de Respuesta:</span>
-                        <div class="flex gap-2">
+            <div class="p-4 sm:p-6 bg-gradient-to-t from-zinc-950 to-transparent">
+                <div class="max-w-3xl mx-auto glass-panel rounded-2xl p-4 flex flex-col gap-4 shadow-2xl">
+                    
+                    <div class="flex flex-col gap-1.5 border-b border-zinc-900/80 pb-3">
+                        <span class="text-[9px] font-bold text-zinc-500 uppercase tracking-wider text-center sm:text-left">Calibración de Enfoque Emocional y Comercial:</span>
+                        <div class="flex gap-2 justify-start overflow-x-auto py-1 no-scrollbar flex-nowrap sm:flex-wrap">
                             <button onclick="setTono('gracioso')" id="btn-gracioso" class="tono-btn activo-gold">😂 Gracioso</button>
                             <button onclick="setTono('coqueto')" id="btn-coqueto" class="tono-btn">😏 Coqueto</button>
                             <button onclick="setTono('hot')" id="btn-hot" class="tono-btn">🔥 Hot</button>
+                            <button onclick="setTono('seguro')" id="btn-seguro" class="tono-btn">🛡️ Seguro</button>
+                            <button onclick="setTono('misterioso')" id="btn-misterioso" class="tono-btn">🔮 Misterioso</button>
+                            <button onclick="setTono('estrategico')" id="btn-estrategico" class="tono-btn">💼 Estratégico</button>
                         </div>
                     </div>
-                    <textarea id="mensaje" rows="2" class="w-full bg-transparent p-2 text-sm text-white focus:outline-none placeholder-zinc-700 resize-none" placeholder="Añade contexto o instrucciones adicionales..."></textarea>
-                    <div class="flex items-center justify-between border-t border-zinc-900 pt-2">
+
+                    <textarea id="mensaje" rows="2" class="w-full bg-transparent p-1 text-sm text-white focus:outline-none placeholder-zinc-700 resize-none" placeholder="Añade contexto adicional (ej: 'Es un cliente difícil', 'Me dejó en visto') o escribe el texto directamente aquí..."></textarea>
+                    
+                    <div class="flex items-center justify-between border-t border-zinc-900 pt-3">
                         <label class="cursor-pointer text-zinc-500 hover:text-amber-500 flex items-center gap-2 text-xs font-semibold">
                             <i class="fa-solid fa-paperclip"></i> <span id="file-status">Adjuntar Captura</span>
                             <input type="file" id="foto" accept="image/*" class="hidden">
                         </label>
-                        <button onclick="executeProductionAnalysis()" id="main-action-btn" class="gold-gradient text-black px-6 py-2 rounded-xl text-xs font-bold uppercase tracking-wider flex items-center gap-2">
+                        <button onclick="executeProductionAnalysis()" id="main-action-btn" class="gold-gradient text-black px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider flex items-center gap-2 transition active:scale-95">
                             Ejecutar Análisis <i class="fa-solid fa-circle-nodes"></i>
                         </button>
                     </div>
@@ -261,17 +271,16 @@
             if(this.files.length > 0) document.getElementById('file-status').innerText = "Imagen lista";
         };
 
-        // ⚡ SIMULACIÓN MEJORADA CON EFECTO LÁSER NEÓN
         function runLiveDemo(btn) {
             btn.disabled = true;
             const laser = document.getElementById('laser');
-            laser.classList.remove('hidden'); // Enciende el láser
-            btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin text-black"></i> Analizando...`;
+            laser.classList.remove('hidden');
+            btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin text-black"></i> Decodificando...`;
             
             setTimeout(() => {
-                laser.classList.add('hidden'); // Apaga el láser
+                laser.classList.add('hidden');
                 document.getElementById('demo-results').classList.remove('hidden');
-                btn.innerHTML = `<i class="fa-solid fa-check text-black"></i> Completado`;
+                btn.innerHTML = `<i class="fa-solid fa-check text-black"></i> Análisis Listo`;
             }, 2000);
         }
 
@@ -280,10 +289,10 @@
             const textContent = document.getElementById('mensaje').value;
             const fileData = document.getElementById('foto').files[0];
 
-            if(!textContent && !fileData) return alert("Escribe algo o sube una captura.");
+            if(!textContent && !fileData) return alert("Escribe un mensaje o adjunta una captura de chat.");
 
             btn.disabled = true;
-            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> PROCESANDO...`;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> ESCANEANDO INTERACCIÓN...`;
 
             let payload = { mensaje: textContent, tono: tonoSeleccionado };
             if (fileData) {
@@ -308,56 +317,14 @@
                 document.getElementById('app-initial').classList.add('hidden');
                 document.getElementById('app-results').classList.remove('hidden');
 
-                let rawText = res.respuesta;
-                let textoLimpio = rawText;
-                let metricsHtml = '';
-
-                const interesMatch = rawText.match(/Interés:\s*(\d+)%/i);
-                const ghostingMatch = rawText.match(/Ghosting:\s*(\d+)%/i);
-
-                if (interesMatch || ghostingMatch) {
-                    const interesVal = interesMatch ? interesMatch[1] : 0;
-                    const ghostingVal = ghostingMatch ? ghostingMatch[1] : 0;
-
-                    metricsHtml = `
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 my-3 bg-zinc-950/80 p-4 rounded-xl border border-zinc-900">
-                            <div>
-                                <div class="flex justify-between items-center mb-1">
-                                    <span class="text-[10px] font-black text-zinc-400 flex items-center gap-1.5 tracking-wider">
-                                        <i class="fa-solid fa-heart text-amber-500"></i> NIVEL DE INTERÉS
-                                    </span>
-                                    <span class="text-xs font-black text-amber-400">${interesVal}%</span>
-                                </div>
-                                <div class="w-full bg-zinc-900 h-2.5 rounded-full overflow-hidden">
-                                    <div class="gold-gradient h-full rounded-full transition-all duration-1000" style="width: ${interesVal}%"></div>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="flex justify-between items-center mb-1">
-                                    <span class="text-[10px] font-black text-zinc-400 flex items-center gap-1.5 tracking-wider">
-                                        <i class="fa-solid fa-ghost text-rose-500"></i> RIESGO DE GHOSTING
-                                    </span>
-                                    <span class="text-xs font-black text-rose-500">${ghostingVal}%</span>
-                                </div>
-                                <div class="w-full bg-zinc-900 h-2.5 rounded-full overflow-hidden">
-                                    <div class="bg-gradient-to-r from-rose-600 to-orange-500 h-full rounded-full transition-all duration-1000" style="width: ${ghostingVal}%"></div>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                    textoLimpio = rawText.replace(/📊[\s\S]*?(🔮)/i, '$1');
-                } else {
-                    document.getElementById('ai-metrics-container').innerHTML = '';
-                }
-
-                document.getElementById('ai-metrics-container').innerHTML = metricsHtml;
-                document.getElementById('ai-response-content').innerText = textoLimpio;
+                document.getElementById('ai-metrics-container').innerHTML = '';
+                document.getElementById('ai-response-content').innerText = res.respuesta;
 
             } catch(e) { 
-                alert("Enciende el servidor (node index.js)"); 
+                alert("Enciende tu servidor backend en Render o local."); 
             }
             document.getElementById('main-action-btn').disabled = false;
-            document.getElementById('main-action-btn').innerHTML = `EJECUTAR ANÁLISIS <i class="fa-solid fa-circle-nodes"></i>`;
+            document.getElementById('main-action-btn').innerHTML = `Ejecutar Análisis <i class="fa-solid fa-circle-nodes"></i>`;
         }
     </script>
 </body>

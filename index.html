@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Nebula IA - Plataforma Oficial</title>
     
+    <!-- Importación de Google Fonts para la tipografía Premium -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&display=swap" rel="stylesheet">
@@ -53,6 +54,7 @@
         </header>
 
         <main class="w-full max-w-7xl mx-auto px-6 py-12 md:py-20 my-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+            
             <div class="text-left space-y-6">
                 <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-zinc-900 border border-zinc-800 text-[10px] sm:text-xs font-semibold text-amber-400">
                     <i class="fa-solid fa-brain animate-pulse"></i> Análisis Conductual e Inteligencia Conversacional
@@ -64,7 +66,7 @@
                     No vuelvas a adivinar qué quisieron decir. Nebula entrega un <strong class="text-white">análisis conversacional avanzado</strong> y <strong class="text-amber-400">respuestas estratégicas inteligentes</strong> válidas para relaciones, ventas y networking en segundos.
                 </p>
                 <div class="pt-2">
-                    <button onclick="showView('view-login')" class="gold-gradient text-black font-black px-8 py-4 rounded-xl shadow-xl shadow-amber-500/20 flex items-center gap-3 text-sm uppercase tracking-wider transition-transform hover:scale-105">
+                    <button onclick="showView('view-app')" class="gold-gradient text-black font-black px-8 py-4 rounded-xl shadow-xl shadow-amber-500/20 flex items-center gap-3 text-sm uppercase tracking-wider transition-transform hover:scale-105">
                         Probar Ahora Gratis <i class="fa-solid fa-arrow-right"></i>
                     </button>
                 </div>
@@ -72,13 +74,16 @@
 
             <div class="flex justify-center items-center">
                 <div class="phone-mockup relative w-[310px] h-[600px] bg-zinc-950 rounded-[48px] border-[6px] border-zinc-800 p-3 flex flex-col justify-between overflow-hidden">
+                    
                     <div class="absolute top-2 left-1/2 -translate-x-1/2 w-28 h-4 bg-zinc-900 rounded-full z-30 flex items-center justify-between px-4">
                         <span class="w-1.5 h-1.5 rounded-full bg-zinc-800"></span>
                         <span class="w-2.5 h-1 bg-zinc-800 rounded-full"></span>
                     </div>
 
                     <div class="flex-1 rounded-[38px] overflow-y-auto bg-black flex flex-col justify-between p-3 pt-6 relative">
+                        
                         <div id="laser" class="hidden absolute left-0 right-0 h-1 bg-gradient-to-r from-transparent via-amber-400 to-transparent shadow-[0_0_15px_#f59e0b] z-20 scanner-line"></div>
+
                         <div class="flex items-center justify-between border-b border-zinc-900 pb-2 mb-2 shrink-0">
                             <span class="text-[9px] font-black tracking-widest text-zinc-500 uppercase">Engine v2.5-Flash</span>
                             <span class="text-[8px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-1.5 py-0.5 rounded-full font-bold">LIVE</span>
@@ -146,8 +151,14 @@
         <div class="w-full max-w-md glass-panel p-8 rounded-3xl shadow-2xl">
             <h2 class="text-3xl font-black mb-2">Bienvenido</h2>
             <p class="text-sm text-zinc-400 mb-6">Ingresa a tu cuenta de Nebula.</p>
-            <div class="grid grid-cols-1 gap-3 mb-6">
-                <button onclick="loginConSocial('Google')" class="bg-zinc-900 hover:bg-zinc-800 transition-colors border border-zinc-800 rounded-xl p-3.5 text-xs font-bold flex items-center justify-center gap-2"><i class="fa-brands fa-google text-red-500 text-sm"></i> Continuar con Google</button>
+            <div class="grid grid-cols-2 gap-3 mb-6">
+                <button onclick="loginConSocial('Google')" class="bg-zinc-900 border border-zinc-800 rounded-xl p-3 text-xs font-bold flex items-center justify-center gap-2"><i class="fa-brands fa-google text-red-500"></i> Google</button>
+                <button onclick="socialLogin('Facebook')" class="bg-zinc-900 border border-zinc-800 rounded-xl p-3 text-xs font-bold flex items-center justify-center gap-2"><i class="fa-brands fa-facebook text-blue-500"></i> Facebook</button>
+            </div>
+            <div class="space-y-4">
+                <input type="email" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-3.5 text-sm text-white focus:border-amber-500 outline-none" placeholder="Correo electrónico">
+                <input type="password" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-3.5 text-sm text-white focus:border-amber-500 outline-none" placeholder="Contraseña">
+                <button onclick="showView('view-app')" class="w-full gold-gradient text-black font-bold p-3.5 rounded-xl text-sm">Autenticar Cuenta</button>
             </div>
             <p onclick="showView('view-landing')" class="text-center text-xs text-zinc-500 mt-6 cursor-pointer hover:text-white">Volver al inicio</p>
         </div>
@@ -157,8 +168,9 @@
         <div class="w-full max-w-md glass-panel p-8 rounded-3xl shadow-2xl">
             <h2 class="text-3xl font-black mb-6">Crea tu cuenta</h2>
             <div class="space-y-4">
-                <button onclick="loginConSocial('Google')" class="w-full bg-zinc-900 hover:bg-zinc-800 transition-colors border border-zinc-800 rounded-xl p-3.5 text-xs font-bold flex items-center justify-center gap-2"><i class="fa-brands fa-google text-red-500 text-sm"></i> Registrarse con Google</button>
-                <p onclick="showView('view-landing')" class="text-center text-xs text-zinc-500 mt-6 cursor-pointer hover:text-white">Volver al inicio</p>
+                <input type="text" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-3.5 text-sm text-white focus:border-amber-500 outline-none" placeholder="Nombre completo">
+                <input type="email" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-3.5 text-sm text-white focus:border-amber-500 outline-none" placeholder="Correo electrónico">
+                <button onclick="showView('view-app')" class="w-full gold-gradient text-black font-bold p-3.5 rounded-xl text-sm">Crear Cuenta</button>
             </div>
         </div>
     </div>
@@ -177,19 +189,20 @@
             </div>
             <div class="border-t border-zinc-900 pt-4 flex items-center justify-between">
                 <span id="user-name" class="text-xs font-semibold text-zinc-400">Usuario Activo</span>
-                <button onclick="cerrarSesion()" class="text-xs text-zinc-500 hover:text-rose-400" title="Cerrar sesión"><i class="fa-solid fa-power-off"></i></button>
+                <button onclick="showView('view-landing')" class="text-xs text-zinc-500 hover:text-rose-400"><i class="fa-solid fa-power-off"></i></button>
             </div>
         </aside>
 
         <main class="flex-1 bg-[#060608] flex flex-col h-full overflow-hidden">
             <header class="w-full border-b border-zinc-900 p-4 flex items-center justify-between bg-zinc-950/50 backdrop-blur-md shrink-0">
-                <span class="text-[10px] uppercase font-bold tracking-widest text-zinc-500">Workspace / Motor Inteligencia Híbrida</span>
+                <span id="role-indicator" class="text-[10px] uppercase font-bold tracking-widest text-zinc-500">Workspace / Motor Inteligencia Híbrida</span>
                 <span class="text-[10px] px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center gap-1.5 font-bold uppercase">
                     <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Servidor en Línea
                 </span>
             </header>
 
             <div id="chat-scroller" class="flex-1 overflow-y-auto p-6 flex flex-col items-center space-y-6 pb-24">
+                
                 <div id="app-initial" class="my-auto max-w-xl text-center flex flex-col items-center py-12">
                     <img src="logo.png" class="w-28 h-28 mb-6 rounded-2xl border border-zinc-800 shadow-2xl">
                     <h3 class="text-2xl font-black mb-2 tracking-tight">Ecosistema Analítico Nebula</h3>
@@ -233,4 +246,353 @@
                     
                     <div class="flex flex-col gap-1.5 border-b border-zinc-900/80 pb-3">
                         <span class="text-[9px] font-bold text-zinc-500 uppercase tracking-wider text-center sm:text-left">Calibración de Enfoque Emocional y Comercial:</span>
-                        <div class="flex gap-2 justify-
+                        <div class="flex gap-2 justify-start overflow-x-auto py-1 no-scrollbar flex-nowrap sm:flex-wrap">
+                            <button onclick="setTono('gracioso')" id="btn-gracioso" class="tono-btn activo-gold">😂 Gracioso</button>
+                            <button onclick="setTono('coqueto')" id="btn-coqueto" class="tono-btn">😏 Coqueto</button>
+                            <button onclick="setTono('hot')" id="btn-hot" class="tono-btn">🔥 Hot</button>
+                            <button onclick="setTono('seguro')" id="btn-seguro" class="tono-btn">🛡️ Seguro</button>
+                            <button onclick="setTono('misterioso')" id="btn-misterioso" class="tono-btn">🔮 Misterioso</button>
+                            <button onclick="setTono('estrategico')" id="btn-estrategico" class="tono-btn">💼 Estratégico</button>
+                        </div>
+                    </div>
+
+                    <div id="image-preview-box" class="hidden flex items-center gap-2 p-2 bg-zinc-900/80 rounded-xl border border-zinc-800 self-start relative">
+                        <img id="preview-img" class="w-14 h-14 object-cover rounded-lg border border-zinc-700">
+                        <button onclick="clearImagePreview()" class="absolute -top-1.5 -right-1.5 w-5 h-5 bg-zinc-800 text-zinc-400 hover:text-white hover:bg-zinc-700 rounded-full flex items-center justify-center text-[10px] border border-zinc-700">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </div>
+
+                    <textarea id="mensaje" rows="2" class="w-full bg-transparent p-1 text-sm text-white focus:outline-none placeholder-zinc-700 resize-none font-medium" placeholder="Añade contexto adicional o escribe el texto directamente aquí..."></textarea>
+                    
+                    <div class="flex items-center justify-between border-t border-zinc-900 pt-3">
+                        <label class="cursor-pointer text-zinc-500 hover:text-amber-500 flex items-center gap-2 text-xs font-semibold select-none">
+                            <i class="fa-solid fa-paperclip"></i> <span id="file-status">Adjuntar Captura</span>
+                            <input type="file" id="foto" accept="image/*" class="hidden">
+                        </label>
+                        <button onclick="executeProductionAnalysis()" id="main-action-btn" class="gold-gradient text-black px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider flex items-center gap-2 transition active:scale-95 shadow-md">
+                            Ejecutar Análisis <i class="fa-solid fa-circle-nodes"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAEEGchpUa4HNuUt_q59XU_t65AwjwA_KM",
+            authDomain: "nebula-2b57e.firebaseapp.com",
+            projectId: "nebula-2b57e",
+            storageBucket: "nebula-2b57e.firebasestorage.app",
+            messagingSenderId: "456903759244",
+            appId: "1:456903759244:web:5d939ac48b5e5bfa55f2a9"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const provider = new GoogleAuthProvider();
+
+        // Configuración de credenciales de Administrador / CEO
+        const CEO_EMAIL = "edierangulo23@gmail.com"; // CAMBIA ESTO POR TU CORREO REAL DE GOOGLE
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                document.getElementById('user-name').innerText = user.displayName || user.email;
+                
+                // Si eres tú, mostramos un indicador visual exclusivo en el panel de control
+                if (user.email === CEO_EMAIL) {
+                    document.getElementById('role-indicator').innerHTML = `<span class="text-amber-400 font-black"><i class="fa-solid fa-crown"></i> Nebula CEO Mode</span>`;
+                }
+                
+                showView('view-app');
+            } else {
+                showView('view-landing');
+            }
+        });
+
+        let tonoSeleccionado = 'gracioso';
+
+        window.showView = function(v) {
+            ['view-landing', 'view-login', 'view-register', 'view-app'].forEach(id => {
+                document.getElementById(id).classList.add('hidden');
+            });
+            document.getElementById(v).classList.remove('hidden');
+        }
+
+        window.loginConSocial = async function(proveedor) {
+            if(proveedor === 'Facebook') {
+                alert("Facebook estará disponible pronto. Por ahora usa Google.");
+                return;
+            }
+            try {
+                const result = await signInWithPopup(auth, provider);
+                const user = result.user;
+                const userRef = doc(db, "usuarios", user.uid);
+                const docSnap = await getDoc(userRef);
+
+                if (!docSnap.exists()) {
+                    // Si el nuevo usuario es el CEO, le damos créditos iniciales altos (aunque no se le gastarán)
+                    const creditosIniciales = (user.email === CEO_EMAIL) ? 99999 : 7;
+                    await setDoc(userRef, { email: user.email, creditos: creditosIniciales, ultima_recarga: new Date().toISOString() });
+                }
+                
+                document.getElementById('user-name').innerText = user.displayName;
+                showView('view-app');
+            } catch (error) { 
+                console.error(error); 
+                alert("Error al iniciar sesión"); 
+            }
+        };
+
+        window.socialLogin = function(proveedor) {
+            alert("El inicio de sesión con " + proveedor + " estará disponible pronto.");
+        }
+
+        window.setTono = function(t) {
+            tonoSeleccionado = t;
+            document.querySelectorAll('.tono-btn').forEach(b => b.classList.remove('activo-gold'));
+            document.getElementById('btn-' + t).classList.add('activo-gold');
+        }
+
+        // Evento de la foto
+        document.addEventListener('DOMContentLoaded', () => {
+            const fotoInput = document.getElementById('foto');
+            if(fotoInput) {
+                fotoInput.onchange = function() {
+                    if(this.files.length > 0) {
+                        const file = this.files[0];
+                        document.getElementById('file-status').innerText = "Imagen lista";
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            document.getElementById('preview-img').src = e.target.result;
+                            document.getElementById('image-preview-box').classList.remove('hidden');
+                        }
+                        reader.readAsDataURL(file);
+                    }
+                };
+            }
+        });
+
+        window.clearImagePreview = function() {
+            document.getElementById('foto').value = "";
+            document.getElementById('image-preview-box').classList.add('hidden');
+            document.getElementById('file-status').innerText = "Adjuntar Captura";
+        }
+
+        window.runLiveDemo = function(btn) {
+            btn.disabled = true;
+            const laser = document.getElementById('laser');
+            laser.classList.remove('hidden');
+            btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin text-black"></i> Decodificando...`;
+            
+            setTimeout(() => {
+                laser.classList.add('hidden');
+                document.getElementById('demo-results').classList.remove('hidden');
+                btn.innerHTML = `<i class="fa-solid fa-check text-black"></i> Análisis Listo`;
+            }, 2000);
+        }
+
+        window.formatAndRenderResponse = function(text) {
+            const container = document.getElementById('ai-response-content');
+            container.innerHTML = ''; 
+
+            const lines = text.split('\n');
+            let htmlOutput = '';
+            let suggestionsHTML = '';
+            let inSuggestions = false;
+
+            function appendSuggestionCard(lineText) {
+                if (!suggestionsHTML) {
+                    suggestionsHTML += `
+                        <div class="pt-2 space-y-3">
+                            <span class="text-xs font-black text-zinc-500 block uppercase tracking-wider mb-1">
+                                <i class="fa-solid fa-copy text-amber-400/80"></i> Mensajes Listos para Enviar:
+                            </span>`;
+                }
+
+                let textToCopy = lineText.replace(/^[•\-\s]+(Opción \d:\s*)?/i, '').trim();
+                textToCopy = textToCopy.replace(/^["'\u201c\u201d]|["'\u201c\u201d]$/g, '').trim(); 
+                
+                let displayLabel = lineText.match(/^[•\-\s]*(Opción \d:)/i) ? lineText.match(/^[•\-\s]*(Opción \d:)/i)[1] : "Sugerencia:";
+                let displayCleanText = textToCopy;
+
+                if (displayCleanText.length > 1) {
+                    let safeTextAttr = textToCopy.replace(/"/g, '&quot;');
+                    suggestionsHTML += `
+                        <div class="group relative flex items-center justify-between p-3.5 bg-zinc-950 border border-zinc-900 rounded-xl hover:border-zinc-800 transition-all">
+                            <div class="pr-12 text-sm text-zinc-200 leading-relaxed font-medium">
+                                <span class="text-amber-500/90 font-black text-[10px] block mb-0.5 uppercase tracking-wide">${displayLabel}</span>
+                                "${displayCleanText}"
+                            </div>
+                            <button data-text="${safeTextAttr}" onclick="copyOptionText(this)" class="absolute right-3 top-1/2 -translate-y-1/2 p-2 bg-zinc-900 hover:bg-zinc-800 text-zinc-400 hover:text-amber-400 rounded-lg border border-zinc-800 transition-all flex items-center justify-center w-8 h-8 text-xs" title="Copiar mensaje">
+                                <i class="fa-regular fa-copy"></i>
+                            </button>
+                        </div>`;
+                }
+            }
+
+            lines.forEach(line => {
+                let trimmed = line.trim();
+                if (!trimmed) return;
+
+                if (trimmed.includes('🧠 LECTURA PSICOLÓGICA:')) {
+                    inSuggestions = false;
+                    let content = trimmed.replace(/.*?🧠 LECTURA PSICOLÓGICA:\s*/i, '');
+                    htmlOutput += `
+                        <div class="p-4 bg-zinc-900/50 border border-amber-500/10 rounded-xl">
+                            <span class="text-xs font-black text-amber-400 flex items-center gap-1.5 mb-1 uppercase tracking-wide">
+                                <i class="fa-solid fa-brain"></i> Lectura Psicológica
+                            </span>
+                            <p class="text-sm text-zinc-200 font-medium leading-relaxed">${content}</p>
+                        </div>`;
+                } else if (trimmed.includes('💡 ESTRATEGIA:')) {
+                    inSuggestions = false;
+                    let content = trimmed.replace(/.*?💡 ESTRATEGIA:\s*/i, '');
+                    htmlOutput += `
+                        <div class="p-4 bg-zinc-900/30 border border-zinc-900 rounded-xl">
+                            <span class="text-xs font-black text-zinc-400 flex items-center gap-1.5 mb-1 uppercase tracking-wide">
+                                <i class="fa-solid fa-lightbulb text-amber-500"></i> Estrategia Táctica
+                            </span>
+                            <p class="text-sm text-zinc-300 leading-relaxed">${content}</p>
+                        </div>`;
+                } else if (trimmed.includes('🚫 EVITA:')) {
+                    inSuggestions = false;
+                    let content = trimmed.replace(/.*?🚫 EVITA:\s*/i, '');
+                    htmlOutput += `
+                        <div class="p-4 bg-rose-950/10 border border-rose-500/20 rounded-xl">
+                            <span class="text-xs font-black text-rose-400 flex items-center gap-1.5 mb-1 uppercase tracking-wide">
+                                <i class="fa-solid fa-circle-xmark"></i> Lo que debes Evitar
+                            </span>
+                            <p class="text-sm text-zinc-300 leading-relaxed">${content}</p>
+                        </div>`;
+                } else if (trimmed.includes('✨ RESPUESTAS SUGERIDAS') || trimmed.includes('💬 COPIAR Y PEGAR')) {
+                    inSuggestions = true;
+                } else if (/^[•\-\s]*Opción \d:/i.test(trimmed) || trimmed.startsWith('•') || trimmed.startsWith('-') || trimmed.startsWith('"') || inSuggestions) {
+                    if (/^[•\-\s]*Opción \d:/i.test(trimmed)) {
+                        inSuggestions = true;
+                    }
+                    appendSuggestionCard(trimmed);
+                } else {
+                    htmlOutput += `<p class="text-sm text-zinc-400 leading-relaxed">${trimmed}</p>`;
+                }
+            });
+
+            if (suggestionsHTML) {
+                suggestionsHTML += `</div>`;
+                htmlOutput += suggestionsHTML;
+            }
+
+            container.innerHTML = htmlOutput;
+        }
+
+        window.copyOptionText = function(btn) {
+            const text = btn.getAttribute('data-text');
+            navigator.clipboard.writeText(text).then(() => {
+                const icon = btn.querySelector('i');
+                icon.className = 'fa-solid fa-check text-emerald-400';
+                btn.classList.add('border-emerald-500/30', 'bg-emerald-950/20');
+                setTimeout(() => {
+                    icon.className = 'fa-regular fa-copy';
+                    btn.classList.remove('border-emerald-500/30', 'bg-emerald-950/20');
+                }, 2000);
+            }).catch(err => console.error("Fallo al copiar: ", err));
+        }
+
+        window.executeProductionAnalysis = async function() {
+            const btn = document.getElementById('main-action-btn');
+            const textContent = document.getElementById('mensaje').value;
+            const fileData = document.getElementById('foto').files[0];
+
+            if(!textContent && !fileData) return alert("Escribe un mensaje o adjunta una captura de chat.");
+
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> ESCANEANDO...`;
+
+            document.getElementById('app-initial').classList.add('hidden');
+            document.getElementById('app-results').classList.add('hidden');
+            document.getElementById('ai-loading-skeleton').classList.remove('hidden');
+
+            let payload = { mensaje: textContent, tono: tonoSeleccionado };
+            if (fileData) {
+                const reader = new FileReader();
+                reader.readAsDataURL(fileData);
+                reader.onload = async () => {
+                    payload.imagen = reader.result;
+                    sendToServer(payload);
+                };
+            } else { sendToServer(payload); }
+        }
+
+        async function consumirCredito(uid, email) {
+            // El CEO no consume ningún tipo de crédito, bypass instantáneo
+            if (email === CEO_EMAIL) return true;
+
+            const userRef = doc(db, "usuarios", uid);
+            const docSnap = await getDoc(userRef);
+            
+            if (docSnap.exists()) {
+                const datos = docSnap.data();
+                if (datos.creditos > 0) {
+                    await setDoc(userRef, { ...datos, creditos: datos.creditos - 1 });
+                    return true; 
+                }
+            }
+            return false; 
+        }
+
+        window.sendToServer = async function(payload) {
+            const user = auth.currentUser;
+
+            // Se pasa el correo al validador para verificar si eres tú
+            if (user && payload.imagen) {
+                const permitido = await consumirCredito(user.uid, user.email);
+                if (!permitidom) {
+                    alert("¡Ups! Te has quedado sin créditos para analizar capturas. Recarga para seguir descifrando chats.");
+                    document.getElementById('ai-loading-skeleton').classList.add('hidden');
+                    document.getElementById('app-initial').classList.remove('hidden');
+                    document.getElementById('main-action-btn').disabled = false;
+                    document.getElementById('main-action-btn').innerHTML = `Ejecutar Análisis <i class="fa-solid fa-circle-nodes"></i>`;
+                    return; 
+                }
+            }
+
+            try {
+                const req = await fetch('https://nebula-backend-29w7.onrender.com/analizar', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const res = await req.json();
+                
+                document.getElementById('ai-loading-skeleton').classList.add('hidden');
+                const resultsContainer = document.getElementById('app-results');
+                resultsContainer.classList.remove('hidden');
+
+                document.getElementById('ai-metrics-container').innerHTML = '';
+                
+                formatAndRenderResponse(res.respuesta);
+
+                document.getElementById('mensaje').value = ''; 
+                clearImagePreview(); 
+
+                setTimeout(() => {
+                    resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 150);
+
+            } catch(e) { 
+                alert("Enciende tu servidor backend en Render o local."); 
+                document.getElementById('ai-loading-skeleton').classList.add('hidden');
+                document.getElementById('app-initial').classList.remove('hidden');
+            }
+            document.getElementById('main-action-btn').disabled = false;
+            document.getElementById('main-action-btn').innerHTML = `Ejecutar Análisis <i class="fa-solid fa-circle-nodes"></i>`;
+        }
+    </script>
+</body>
+</html>

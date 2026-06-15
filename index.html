@@ -273,47 +273,93 @@
         </main>
     </div>
 
-    <script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAEEGchpUa4HNuUt_q59XU_t65AwjwA_KM",
+            authDomain: "nebula-2b57e.firebaseapp.com",
+            projectId: "nebula-2b57e",
+            storageBucket: "nebula-2b57e.firebasestorage.app",
+            messagingSenderId: "456903759244",
+            appId: "1:456903759244:web:5d939ac48b5e5bfa55f2a9"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const provider = new GoogleAuthProvider();
+
         let tonoSeleccionado = 'gracioso';
 
-        function showView(v) {
+        window.showView = function(v) {
             ['view-landing', 'view-login', 'view-register', 'view-app'].forEach(id => {
                 document.getElementById(id).classList.add('hidden');
             });
             document.getElementById(v).classList.remove('hidden');
         }
 
-        window.loginConSocial = function(p) {
-            document.getElementById('user-name').innerText = p + " User";
-            showView('view-app');
+        window.loginConSocial = async function(proveedor) {
+            if(proveedor === 'Facebook') {
+                alert("Facebook estará disponible pronto. Por ahora usa Google.");
+                return;
+            }
+            try {
+                const result = await signInWithPopup(auth, provider);
+                const user = result.user;
+                const userRef = doc(db, "usuarios", user.uid);
+                const docSnap = await getDoc(userRef);
+
+                if (!docSnap.exists()) {
+                    await setDoc(userRef, { email: user.email, creditos: 7, ultima_recarga: new Date().toISOString() });
+                }
+                
+                document.getElementById('user-name').innerText = user.displayName;
+                showView('view-app');
+            } catch (error) { 
+                console.error(error); 
+                alert("Error al iniciar sesión"); 
+            }
+        };
+
+        window.socialLogin = function(proveedor) {
+            alert("El inicio de sesión con " + proveedor + " estará disponible pronto.");
         }
 
-        function setTono(t) {
+        window.setTono = function(t) {
             tonoSeleccionado = t;
             document.querySelectorAll('.tono-btn').forEach(b => b.classList.remove('activo-gold'));
             document.getElementById('btn-' + t).classList.add('activo-gold');
         }
 
-        document.getElementById('foto').onchange = function() {
-            if(this.files.length > 0) {
-                const file = this.files[0];
-                document.getElementById('file-status').innerText = "Imagen lista";
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    document.getElementById('preview-img').src = e.target.result;
-                    document.getElementById('image-preview-box').classList.remove('hidden');
-                }
-                reader.readAsDataURL(file);
+        // Evento de la foto
+        document.addEventListener('DOMContentLoaded', () => {
+            const fotoInput = document.getElementById('foto');
+            if(fotoInput) {
+                fotoInput.onchange = function() {
+                    if(this.files.length > 0) {
+                        const file = this.files[0];
+                        document.getElementById('file-status').innerText = "Imagen lista";
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            document.getElementById('preview-img').src = e.target.result;
+                            document.getElementById('image-preview-box').classList.remove('hidden');
+                        }
+                        reader.readAsDataURL(file);
+                    }
+                };
             }
-        };
+        });
 
-        function clearImagePreview() {
+        window.clearImagePreview = function() {
             document.getElementById('foto').value = "";
             document.getElementById('image-preview-box').classList.add('hidden');
             document.getElementById('file-status').innerText = "Adjuntar Captura";
         }
 
-        function runLiveDemo(btn) {
+        window.runLiveDemo = function(btn) {
             btn.disabled = true;
             const laser = document.getElementById('laser');
             laser.classList.remove('hidden');
@@ -326,8 +372,7 @@
             }, 2000);
         }
 
-        // PARSER PROTEGIDO CONTRA CONTROL DE ASPAS Y RENDERIZADO INLINE
-        function formatAndRenderResponse(text) {
+        window.formatAndRenderResponse = function(text) {
             const container = document.getElementById('ai-response-content');
             container.innerHTML = ''; 
 
@@ -352,9 +397,7 @@
                 let displayCleanText = textToCopy;
 
                 if (displayCleanText.length > 1) {
-                    // Escapamos comillas dobles para que el atributo HTML data-text no colapse jamás
                     let safeTextAttr = textToCopy.replace(/"/g, '&quot;');
-
                     suggestionsHTML += `
                         <div class="group relative flex items-center justify-between p-3.5 bg-zinc-950 border border-zinc-900 rounded-xl hover:border-zinc-800 transition-all">
                             <div class="pr-12 text-sm text-zinc-200 leading-relaxed font-medium">
@@ -422,8 +465,7 @@
             container.innerHTML = htmlOutput;
         }
 
-        // FUNCIÓN DE COPIADO CORREGIDA (EXTRAE DESDE DATATEXT SIN RIESGO DE SINTAXIS)
-        function copyOptionText(btn) {
+        window.copyOptionText = function(btn) {
             const text = btn.getAttribute('data-text');
             navigator.clipboard.writeText(text).then(() => {
                 const icon = btn.querySelector('i');
@@ -436,7 +478,7 @@
             }).catch(err => console.error("Fallo al copiar: ", err));
         }
 
-        async function executeProductionAnalysis() {
+        window.executeProductionAnalysis = async function() {
             const btn = document.getElementById('main-action-btn');
             const textContent = document.getElementById('mensaje').value;
             const fileData = document.getElementById('foto').files[0];
@@ -461,7 +503,7 @@
             } else { sendToServer(payload); }
         }
 
-        async function sendToServer(payload) {
+        window.sendToServer = async function(payload) {
             try {
                 const req = await fetch('https://nebula-backend-29w7.onrender.com/analizar', {
                     method: 'POST',

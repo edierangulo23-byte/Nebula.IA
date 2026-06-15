@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Nebula IA - Plataforma Oficial</title>
     
-    <!-- Importación de Google Fonts para la tipografía Premium -->
+    <link rel="icon" type="image/png" href="logo.png">
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&display=swap" rel="stylesheet">
@@ -299,13 +300,13 @@
         const provider = new GoogleAuthProvider();
 
         // Configuración de credenciales de Administrador / CEO
-        const CEO_EMAIL = "edierangulo23@gmail.com"; // CAMBIA ESTO POR TU CORREO REAL DE GOOGLE
+        const CEO_EMAIL = "edierangulo23@gmail.com"; 
 
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 document.getElementById('user-name').innerText = user.displayName || user.email;
                 
-                // Si eres tú, mostramos un indicador visual exclusivo en el panel de control
+                // Si eres tú, mostramos el indicador exclusivo en el panel de control
                 if (user.email === CEO_EMAIL) {
                     document.getElementById('role-indicator').innerHTML = `<span class="text-amber-400 font-black"><i class="fa-solid fa-crown"></i> Nebula CEO Mode</span>`;
                 }
@@ -337,7 +338,7 @@
                 const docSnap = await getDoc(userRef);
 
                 if (!docSnap.exists()) {
-                    // Si el nuevo usuario es el CEO, le damos créditos iniciales altos (aunque no se le gastarán)
+                    // Si el nuevo usuario es el CEO, le damos créditos iniciales altos
                     const creditosIniciales = (user.email === CEO_EMAIL) ? 99999 : 7;
                     await setDoc(userRef, { email: user.email, creditos: creditosIniciales, ultima_recarga: new Date().toISOString() });
                 }
@@ -549,10 +550,9 @@
         window.sendToServer = async function(payload) {
             const user = auth.currentUser;
 
-            // Se pasa el correo al validador para verificar si eres tú
             if (user && payload.imagen) {
                 const permitido = await consumirCredito(user.uid, user.email);
-                if (!permitidom) {
+                if (!permitido) {
                     alert("¡Ups! Te has quedado sin créditos para analizar capturas. Recarga para seguir descifrando chats.");
                     document.getElementById('ai-loading-skeleton').classList.add('hidden');
                     document.getElementById('app-initial').classList.remove('hidden');

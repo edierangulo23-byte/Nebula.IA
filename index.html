@@ -5,8 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Nebula IA - Plataforma Oficial</title>
     
+    <!-- FAVICON: Reemplaza el mundo gris por el logotipo oficial de Nebula -->
     <link rel="icon" type="image/png" href="logo.png">
     
+    <!-- Importación de Google Fonts para la tipografía Premium -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&display=swap" rel="stylesheet">
@@ -42,6 +44,7 @@
 </head>
 <body class="h-screen h-[100dvh] overflow-hidden flex flex-col">
 
+    <!-- LANDING VIEW -->
     <div id="view-landing" class="flex-1 overflow-y-auto flex flex-col bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-amber-950/20 via-zinc-950 to-black">
         <header class="w-full max-w-7xl mx-auto px-6 py-4 flex justify-between items-center border-b border-zinc-900/80 shrink-0">
             <div class="flex items-center gap-3">
@@ -55,7 +58,6 @@
         </header>
 
         <main class="w-full max-w-7xl mx-auto px-6 py-12 md:py-20 my-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-            
             <div class="text-left space-y-6">
                 <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-zinc-900 border border-zinc-800 text-[10px] sm:text-xs font-semibold text-amber-400">
                     <i class="fa-solid fa-brain animate-pulse"></i> Análisis Conductual e Inteligencia Conversacional
@@ -75,14 +77,12 @@
 
             <div class="flex justify-center items-center">
                 <div class="phone-mockup relative w-[310px] h-[600px] bg-zinc-950 rounded-[48px] border-[6px] border-zinc-800 p-3 flex flex-col justify-between overflow-hidden">
-                    
                     <div class="absolute top-2 left-1/2 -translate-x-1/2 w-28 h-4 bg-zinc-900 rounded-full z-30 flex items-center justify-between px-4">
                         <span class="w-1.5 h-1.5 rounded-full bg-zinc-800"></span>
                         <span class="w-2.5 h-1 bg-zinc-800 rounded-full"></span>
                     </div>
 
                     <div class="flex-1 rounded-[38px] overflow-y-auto bg-black flex flex-col justify-between p-3 pt-6 relative">
-                        
                         <div id="laser" class="hidden absolute left-0 right-0 h-1 bg-gradient-to-r from-transparent via-amber-400 to-transparent shadow-[0_0_15px_#f59e0b] z-20 scanner-line"></div>
 
                         <div class="flex items-center justify-between border-b border-zinc-900 pb-2 mb-2 shrink-0">
@@ -148,6 +148,7 @@
         </main>
     </div>
 
+    <!-- LOGIN VIEW -->
     <div id="view-login" class="hidden flex-1 flex items-center justify-center px-4">
         <div class="w-full max-w-md glass-panel p-8 rounded-3xl shadow-2xl">
             <h2 class="text-3xl font-black mb-2">Bienvenido</h2>
@@ -165,6 +166,7 @@
         </div>
     </div>
 
+    <!-- REGISTER VIEW -->
     <div id="view-register" class="hidden flex-1 flex items-center justify-center px-4">
         <div class="w-full max-w-md glass-panel p-8 rounded-3xl shadow-2xl">
             <h2 class="text-3xl font-black mb-6">Crea tu cuenta</h2>
@@ -176,8 +178,10 @@
         </div>
     </div>
 
-    <div id="view-app" class="hidden flex-1 flex h-full overflow-hidden">
-        <aside class="w-64 bg-black border-r border-zinc-900 hidden md:flex flex-col p-4 justify-between">
+    <!-- MAIN APP VIEW (Contención estricta DVH añadida para evitar desbordes móviles) -->
+    <div id="view-app" class="hidden w-full h-screen h-[100dvh] flex overflow-hidden relative">
+        <!-- Sidebar para Escritorio -->
+        <aside class="w-64 bg-black border-r border-zinc-900 hidden md:flex flex-col p-4 justify-between shrink-0">
             <div>
                 <div class="flex items-center gap-3 mb-8 px-2">
                     <img src="logo.png" class="w-8 h-8 rounded-full border border-amber-500/30">
@@ -194,24 +198,26 @@
             </div>
         </aside>
 
-        <main class="flex-1 bg-[#060608] flex flex-col h-full overflow-hidden">
+        <!-- Chat Workspace -->
+        <main class="flex-1 bg-[#060608] flex flex-col h-full min-h-0 overflow-hidden relative">
             <header class="w-full border-b border-zinc-900 p-4 flex items-center justify-between bg-zinc-950/50 backdrop-blur-md shrink-0">
-                <span id="role-indicator" class="text-[10px] uppercase font-bold tracking-widest text-zinc-500">Workspace / Motor Inteligencia Híbrida</span>
-                <span class="text-[10px] px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center gap-1.5 font-bold uppercase">
+                <span id="role-indicator" class="text-[10px] uppercase font-bold tracking-widest text-zinc-500 truncate max-w-[60%]">Workspace / Motor Inteligencia Híbrida</span>
+                <span class="text-[10px] px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center gap-1.5 font-bold uppercase shrink-0">
                     <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Servidor en Línea
                 </span>
             </header>
 
-            <div id="chat-scroller" class="flex-1 overflow-y-auto p-6 flex flex-col items-center space-y-6 pb-24">
+            <!-- Scroller Central (Eliminado padding excesivo que empujaba el footer) -->
+            <div id="chat-scroller" class="flex-1 overflow-y-auto p-4 sm:p-6 flex flex-col items-center space-y-6">
                 
-                <div id="app-initial" class="my-auto max-w-xl text-center flex flex-col items-center py-12">
-                    <img src="logo.png" class="w-28 h-28 mb-6 rounded-2xl border border-zinc-800 shadow-2xl">
-                    <h3 class="text-2xl font-black mb-2 tracking-tight">Ecosistema Analítico Nebula</h3>
-                    <p class="text-sm text-zinc-400 font-medium mb-1">Tu aliada de persuasión estratégica.</p>
-                    <p class="text-xs text-zinc-500">Relaciones • Ventas • Networking. Sube tu conversación y decodifica la psicología del chat.</p>
+                <div id="app-initial" class="my-auto max-w-xl text-center flex flex-col items-center py-6 sm:py-12">
+                    <img src="logo.png" class="w-20 h-20 sm:w-28 sm:h-28 mb-4 sm:mb-6 rounded-2xl border border-zinc-800 shadow-2xl">
+                    <h3 class="text-xl sm:text-2xl font-black mb-1 sm:mb-2 tracking-tight">Ecosistema Analítico Nebula</h3>
+                    <p class="text-xs sm:text-sm text-zinc-400 font-medium mb-1">Tu aliada de persuasión estratégica.</p>
+                    <p class="text-[11px] sm:text-xs text-zinc-500 px-4">Relaciones • Ventas • Networking. Sube tu conversación y decodifica la psicología del chat.</p>
                 </div>
 
-                <div id="ai-loading-skeleton" class="hidden w-full max-w-3xl pt-4 animate-pulse space-y-4">
+                <div id="ai-loading-skeleton" class="hidden w-full max-w-3xl pt-2 animate-pulse space-y-4">
                     <div class="flex gap-4 p-5 rounded-2xl bg-zinc-900/20 border border-zinc-900/60">
                         <div class="w-10 h-10 bg-zinc-800 rounded-xl shrink-0 border border-zinc-700/30"></div>
                         <div class="space-y-4 w-full">
@@ -220,15 +226,11 @@
                                 <div class="h-3 bg-zinc-800 rounded w-3/4"></div>
                                 <div class="h-3 bg-zinc-800 rounded w-5/6"></div>
                             </div>
-                            <div class="pt-2 space-y-2.5">
-                                <div class="h-12 bg-zinc-900 rounded-xl w-full"></div>
-                                <div class="h-12 bg-zinc-900 rounded-xl w-full"></div>
-                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div id="app-results" class="hidden w-full max-w-3xl space-y-6 pt-4 transition-all duration-500">
+                <div id="app-results" class="hidden w-full max-w-3xl space-y-6 pt-2 transition-all duration-500">
                     <div class="flex gap-4 p-5 rounded-2xl bg-zinc-900/40 border border-zinc-900 shadow-2xl">
                         <img src="logo.png" class="w-10 h-10 rounded-xl shrink-0 border border-amber-500/20">
                         <div class="space-y-4 w-full">
@@ -242,12 +244,14 @@
                 </div>
             </div>
 
-            <div class="p-4 sm:p-6 bg-gradient-to-t from-zinc-950 via-zinc-950/90 to-transparent shrink-0">
-                <div class="max-w-3xl mx-auto glass-panel rounded-2xl p-4 flex flex-col gap-4 shadow-2xl border border-zinc-800/60 bg-[#09090b]/95">
+            <!-- Panel de Entrada de Texto (Fijado abajo de forma compacta y sólida) -->
+            <div class="p-3 sm:p-6 bg-zinc-950/90 border-t border-zinc-900 shrink-0 pb-6 sm:pb-6">
+                <div class="max-w-3xl mx-auto glass-panel rounded-2xl p-3 sm:p-4 flex flex-col gap-3 shadow-2xl bg-[#09090b]/95">
                     
-                    <div class="flex flex-col gap-1.5 border-b border-zinc-900/80 pb-3">
-                        <span class="text-[9px] font-bold text-zinc-500 uppercase tracking-wider text-center sm:text-left">Calibración de Enfoque Emocional y Comercial:</span>
-                        <div class="flex gap-2 justify-start overflow-x-auto py-1 no-scrollbar flex-nowrap sm:flex-wrap">
+                    <div class="flex flex-col gap-1 border-b border-zinc-900/80 pb-2">
+                        <!-- Ocultado título largo en móviles para maximizar espacio vertical -->
+                        <span class="text-[9px] font-bold text-zinc-500 uppercase tracking-wider hidden sm:block">Calibración de Enfoque Emocional y Comercial:</span>
+                        <div class="flex gap-1.5 justify-start overflow-x-auto py-0.5 no-scrollbar flex-nowrap sm:flex-wrap">
                             <button onclick="setTono('gracioso')" id="btn-gracioso" class="tono-btn activo-gold">😂 Gracioso</button>
                             <button onclick="setTono('coqueto')" id="btn-coqueto" class="tono-btn">😏 Coqueto</button>
                             <button onclick="setTono('hot')" id="btn-hot" class="tono-btn">🔥 Hot</button>
@@ -266,13 +270,13 @@
 
                     <textarea id="mensaje" rows="2" class="w-full bg-transparent p-1 text-sm text-white focus:outline-none placeholder-zinc-700 resize-none font-medium" placeholder="Añade contexto adicional o escribe el texto directamente aquí..."></textarea>
                     
-                    <div class="flex items-center justify-between border-t border-zinc-900 pt-3">
+                    <div class="flex items-center justify-between border-t border-zinc-900 pt-2.5">
                         <label class="cursor-pointer text-zinc-500 hover:text-amber-500 flex items-center gap-2 text-xs font-semibold select-none">
                             <i class="fa-solid fa-paperclip"></i> <span id="file-status">Adjuntar Captura</span>
                             <input type="file" id="foto" accept="image/*" class="hidden">
                         </label>
-                        <button onclick="executeProductionAnalysis()" id="main-action-btn" class="gold-gradient text-black px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider flex items-center gap-2 transition active:scale-95 shadow-md">
-                            Ejecutar Análisis <i class="fa-solid fa-circle-nodes"></i>
+                        <button onclick="executeProductionAnalysis()" id="main-action-btn" class="gold-gradient text-black px-5 py-2 rounded-xl text-xs font-black uppercase tracking-wider flex items-center gap-2 transition active:scale-95 shadow-md">
+                            Analizar <i class="fa-solid fa-circle-nodes"></i>
                         </button>
                     </div>
                 </div>
@@ -300,17 +304,14 @@
         const provider = new GoogleAuthProvider();
 
         // Configuración de credenciales de Administrador / CEO
-        const CEO_EMAIL = "edierangulo23@gmail.com"; 
+        const CEO_EMAIL = "tu_correo_de_ceo@gmail.com"; 
 
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 document.getElementById('user-name').innerText = user.displayName || user.email;
-                
-                // Si eres tú, mostramos el indicador exclusivo en el panel de control
                 if (user.email === CEO_EMAIL) {
                     document.getElementById('role-indicator').innerHTML = `<span class="text-amber-400 font-black"><i class="fa-solid fa-crown"></i> Nebula CEO Mode</span>`;
                 }
-                
                 showView('view-app');
             } else {
                 showView('view-landing');
@@ -338,7 +339,6 @@
                 const docSnap = await getDoc(userRef);
 
                 if (!docSnap.exists()) {
-                    // Si el nuevo usuario es el CEO, le damos créditos iniciales altos
                     const creditosIniciales = (user.email === CEO_EMAIL) ? 99999 : 7;
                     await setDoc(userRef, { email: user.email, creditos: creditosIniciales, ultima_recarga: new Date().toISOString() });
                 }
@@ -361,7 +361,6 @@
             document.getElementById('btn-' + t).classList.add('activo-gold');
         }
 
-        // Evento de la foto
         document.addEventListener('DOMContentLoaded', () => {
             const fotoInput = document.getElementById('foto');
             if(fotoInput) {
@@ -531,7 +530,6 @@
         }
 
         async function consumirCredito(uid, email) {
-            // El CEO no consume ningún tipo de crédito, bypass instantáneo
             if (email === CEO_EMAIL) return true;
 
             const userRef = doc(db, "usuarios", uid);
@@ -557,7 +555,7 @@
                     document.getElementById('ai-loading-skeleton').classList.add('hidden');
                     document.getElementById('app-initial').classList.remove('hidden');
                     document.getElementById('main-action-btn').disabled = false;
-                    document.getElementById('main-action-btn').innerHTML = `Ejecutar Análisis <i class="fa-solid fa-circle-nodes"></i>`;
+                    document.getElementById('main-action-btn').innerHTML = `Analizar <i class="fa-solid fa-circle-nodes"></i>`;
                     return; 
                 }
             }
@@ -591,7 +589,7 @@
                 document.getElementById('app-initial').classList.remove('hidden');
             }
             document.getElementById('main-action-btn').disabled = false;
-            document.getElementById('main-action-btn').innerHTML = `Ejecutar Análisis <i class="fa-solid fa-circle-nodes"></i>`;
+            document.getElementById('main-action-btn').innerHTML = `Analizar <i class="fa-solid fa-circle-nodes"></i>`;
         }
     </script>
 </body>

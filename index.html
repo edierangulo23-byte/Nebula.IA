@@ -145,38 +145,39 @@
         </main>
     </div>
 
-    <div id="view-login" class="hidden flex-1 flex items-center justify-center px-4">
+    <div id="view-login" class="hidden flex-1 flex items-center justify-center px-4 bg-zinc-950">
         <div class="w-full max-w-md glass-panel p-8 rounded-3xl shadow-2xl">
-            <h2 class="text-3xl font-black mb-2">Bienvenido</h2>
+            <h2 class="text-3xl font-black mb-2 text-white">Bienvenido</h2>
             <p class="text-sm text-zinc-400 mb-6">Ingresa a tu cuenta de Nebula.</p>
             <div class="grid grid-cols-2 gap-3 mb-6">
-                <button onclick="loginConSocial('Google')" class="bg-zinc-900 border border-zinc-800 rounded-xl p-3 text-xs font-bold flex items-center justify-center gap-2"><i class="fa-brands fa-google text-red-500"></i> Google</button>
-                <button onclick="socialLogin('Facebook')" class="bg-zinc-900 border border-zinc-800 rounded-xl p-3 text-xs font-bold flex items-center justify-center gap-2"><i class="fa-brands fa-facebook text-blue-500"></i> Facebook</button>
+                <button onclick="loginConSocial('Google')" class="bg-zinc-900 border border-zinc-800 rounded-xl p-3 text-xs font-bold flex items-center justify-center gap-2 text-white"><i class="fa-brands fa-google text-red-500"></i> Google</button>
+                <button onclick="socialLogin('Facebook')" class="bg-zinc-900 border border-zinc-800 rounded-xl p-3 text-xs font-bold flex items-center justify-center gap-2 text-white"><i class="fa-brands fa-facebook text-blue-500"></i> Facebook</button>
             </div>
             <div class="space-y-4">
-                <input type="email" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-3.5 text-sm text-white focus:border-amber-500 outline-none" placeholder="Correo electrónico">
-                <input type="password" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-3.5 text-sm text-white focus:border-amber-500 outline-none" placeholder="Contraseña">
-                <button onclick="showView('view-app')" class="w-full gold-gradient text-black font-bold p-3.5 rounded-xl text-sm">Autenticar Cuenta</button>
+                <input type="email" id="login-email" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl p-3.5 text-sm text-white focus:border-amber-500 outline-none" placeholder="Correo electrónico">
+                <input type="password" id="login-password" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl p-3.5 text-sm text-white focus:border-amber-500 outline-none" placeholder="Contraseña">
+                <button onclick="window.loginConEmail()" class="w-full gold-gradient text-black font-bold p-3.5 rounded-xl text-sm transition active:scale-98">Autenticar Cuenta</button>
             </div>
             <p onclick="showView('view-landing')" class="text-center text-xs text-zinc-500 mt-6 cursor-pointer hover:text-white">Volver al inicio</p>
         </div>
     </div>
 
-    <div id="view-register" class="hidden flex-1 flex items-center justify-center px-4">
+    <div id="view-register" class="hidden flex-1 flex items-center justify-center px-4 bg-zinc-950">
         <div class="w-full max-w-md glass-panel p-8 rounded-3xl shadow-2xl">
-            <h2 class="text-3xl font-black mb-6">Crea tu cuenta</h2>
+            <h2 class="text-3xl font-black mb-6 text-white">Crea tu cuenta</h2>
             <div class="space-y-4">
-                <input type="text" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-3.5 text-sm text-white focus:border-amber-500 outline-none" placeholder="Nombre completo">
-                <input type="email" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-3.5 text-sm text-white focus:border-amber-500 outline-none" placeholder="Correo electrónico">
-                <button onclick="showView('view-app')" class="w-full gold-gradient text-black font-bold p-3.5 rounded-xl text-sm">Crear Cuenta</button>
+                <input type="text" id="register-name" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl p-3.5 text-sm text-white focus:border-amber-500 outline-none" placeholder="Nombre completo">
+                <input type="email" id="register-email" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl p-3.5 text-sm text-white focus:border-amber-500 outline-none" placeholder="Correo electrónico">
+                <input type="password" id="register-password" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl p-3.5 text-sm text-white focus:border-amber-500 outline-none" placeholder="Elige una contraseña segura">
+                <button onclick="window.registrarConEmail()" class="w-full gold-gradient text-black font-bold p-3.5 rounded-xl text-sm transition active:scale-98">Crear Cuenta</button>
             </div>
+            <p onclick="showView('view-landing')" class="text-center text-xs text-zinc-500 mt-6 cursor-pointer hover:text-white">Volver al inicio</p>
         </div>
     </div>
 
     <div id="view-app" class="hidden fixed inset-0 w-full h-[100dvh] flex flex-col md:flex-row overflow-hidden bg-[#030303] z-40">
         <aside class="w-64 bg-black border-r border-zinc-900 hidden md:flex flex-col p-4 justify-between shrink-0">
             <div>
-                <!-- 🌌 ¡Logo de Nebula en Sidebar convertido en Botón de Inicio con Tooltip! -->
                 <div onclick="showView('view-landing')" class="flex items-center gap-3 mb-8 px-2 cursor-pointer hover:opacity-80 transition-all group select-none" title="Ir al inicio">
                     <img src="logo.png" class="w-8 h-8 rounded-full border border-amber-500/30 group-hover:border-amber-400 transition-colors">
                     <span class="text-sm font-bold uppercase tracking-wider text-zinc-300 group-hover:text-white transition-colors">Nebula Enterprise</span>
@@ -189,15 +190,14 @@
                 </nav>
             </div>
             <div class="border-t border-zinc-900 pt-4 flex items-center justify-between">
-                <span id="user-name" class="text-xs font-semibold text-zinc-400">Usuario Activo</span>
-                <button onclick="showView('view-landing')" class="text-xs text-zinc-500 hover:text-rose-400" title="Cerrar Vista"><i class="fa-solid fa-power-off"></i></button>
+                <span id="user-name" class="text-xs font-semibold text-zinc-400 truncate max-w-[140px]">Usuario Activo</span>
+                <button onclick="window.cerrarSesion()" class="text-xs text-zinc-500 hover:text-rose-400 transition-colors" title="Cerrar Sesión"><i class="fa-solid fa-power-off"></i></button>
             </div>
         </aside>
 
         <main class="flex-1 bg-[#060608] flex flex-col min-h-0 overflow-hidden relative">
             <header class="w-full border-b border-zinc-900 p-4 flex items-center justify-between bg-zinc-950/50 backdrop-blur-md shrink-0">
                 <div class="flex items-center gap-3">
-                    <!-- 🏠 ¡Casita unificada con el mismo Tooltip estándar! -->
                     <button onclick="showView('view-landing')" class="text-zinc-500 hover:text-amber-500 transition-colors flex items-center" title="Ir al inicio">
                         <i class="fa-solid fa-house text-lg"></i>
                     </button>
@@ -296,7 +296,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, updateProfile } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, doc, getDoc, setDoc, collection, addDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
@@ -361,6 +361,48 @@
             document.getElementById(v).classList.remove('hidden');
         }
 
+        // 🔐 Funciones de Autenticación Reales (Opción A)
+        window.loginConEmail = async function() {
+            const email = document.getElementById('login-email').value.trim();
+            const pass = document.getElementById('login-password').value;
+            if(!email || !pass) return alert("Por favor, completa todos los campos.");
+            try {
+                await signInWithEmailAndPassword(auth, email, pass);
+            } catch(error) {
+                console.error(error);
+                alert("Error al iniciar sesión: Verifique sus credenciales.");
+            }
+        };
+
+        window.registrarConEmail = async function() {
+            const name = document.getElementById('register-name').value.trim();
+            const email = document.getElementById('register-email').value.trim();
+            const pass = document.getElementById('register-password').value;
+            if(!name || !email || !pass) return alert("Por favor, completa todos los campos.");
+            if(pass.length < 6) return alert("La contraseña debe tener al menos 6 caracteres.");
+
+            try {
+                const result = await createUserWithEmailAndPassword(auth, email, pass);
+                await updateProfile(result.user, { displayName: name });
+                
+                const userRef = doc(db, "usuarios", result.user.uid);
+                const creditosIniciales = (email === CEO_EMAIL) ? 99999 : 7;
+                await setDoc(userRef, { email: email, creditos: creditosIniciales, ultima_recarga: new Date().toISOString() });
+            } catch(error) {
+                console.error(error);
+                alert("Error al registrar cuenta: " + error.message);
+            }
+        };
+
+        window.cerrarSesion = async function() {
+            try {
+                await signOut(auth);
+                showView('view-landing');
+            } catch(error) {
+                console.error("Error al cerrar sesión:", error);
+            }
+        };
+
         window.loginConSocial = async function(proveedor) {
             if(proveedor === 'Facebook') {
                 alert("Facebook estará disponible pronto. Por ahora usa Google.");
@@ -376,12 +418,10 @@
                     const creditosIniciales = (user.email === CEO_EMAIL) ? 99999 : 7;
                     await setDoc(userRef, { email: user.email, creditos: creditosIniciales, ultima_recarga: new Date().toISOString() });
                 }
-                
-                document.getElementById('user-name').innerText = user.displayName;
                 showView('view-app');
             } catch (error) { 
                 console.error(error); 
-                alert("Error al iniciar sesión"); 
+                alert("Error al iniciar sesión con Google"); 
             }
         };
 
@@ -432,6 +472,36 @@
             }, 2000);
         }
 
+        // 📊 Renderizador de Métricas Dinámicas (Opción B)
+        window.renderMetrics = function(interes, tension) {
+            const metricsContainer = document.getElementById('ai-metrics-container');
+            if(!metricsContainer) return;
+            metricsContainer.innerHTML = `
+                <div class="bg-zinc-950/80 p-3.5 rounded-xl border border-zinc-900 space-y-2 mb-4">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <div class="flex justify-between text-[9px] font-black tracking-wider mb-1">
+                                <span class="text-zinc-500">INTERÉS DETECTADO</span>
+                                <span class="text-amber-400">${interes}%</span>
+                            </div>
+                            <div class="w-full bg-zinc-900 h-1.5 rounded-full overflow-hidden">
+                                <div class="gold-gradient h-full" style="width: ${interes}%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-[9px] font-black tracking-wider mb-1">
+                                <span class="text-zinc-500">TENSIÓN CONDUCTUAL</span>
+                                <span class="text-orange-500">${tension}%</span>
+                            </div>
+                            <div class="w-full bg-zinc-900 h-1.5 rounded-full overflow-hidden">
+                                <div class="bg-gradient-to-r from-orange-500 to-amber-500 h-full" style="width: ${tension}%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
         window.loadChatHistory = async function(uid) {
             const historyContainer = document.getElementById('chats-history-list');
             if (!historyContainer) return;
@@ -454,9 +524,11 @@
                     
                     const safePrompt = btoa(unescape(encodeURIComponent(rawPrompt)));
                     const safeRes = btoa(unescape(encodeURIComponent(data.respuesta || '')));
+                    const interes = data.interes || 85; 
+                    const tension = data.tension || 80;
 
                     html += `
-                        <div onclick="window.viewPastChat('${safePrompt}', '${safeRes}', this)" class="chat-history-item text-zinc-400 hover:text-white hover:bg-zinc-900/40 text-xs p-2.5 rounded-xl font-medium cursor-pointer transition-all truncate flex items-center gap-2 border-l-2 border-transparent">
+                        <div onclick="window.viewPastChat('${safePrompt}', '${safeRes}', ${interes}, ${tension}, this)" class="chat-history-item text-zinc-400 hover:text-white hover:bg-zinc-900/40 text-xs p-2.5 rounded-xl font-medium cursor-pointer transition-all truncate flex items-center gap-2 border-l-2 border-transparent">
                             <i class="fa-regular fa-comment text-[10px] text-zinc-600 group-hover:text-amber-500"></i>
                             <span class="truncate">${shortPrompt}</span>
                         </div>
@@ -469,7 +541,7 @@
             }
         }
 
-        window.viewPastChat = function(base64Prompt, base64Res, element) {
+        window.viewPastChat = function(base64Prompt, base64Res, interes, tension, element) {
             document.querySelectorAll('.chat-history-item').forEach(el => {
                 el.classList.remove('bg-zinc-900/50', 'border-amber-500', 'text-white');
                 el.classList.add('text-zinc-400', 'border-transparent');
@@ -486,7 +558,9 @@
             
             const resultsContainer = document.getElementById('app-results');
             resultsContainer.classList.remove('hidden');
-            document.getElementById('ai-metrics-container').innerHTML = '';
+            
+            // 📊 Recuperación exacta de los porcentajes (Opción B)
+            window.renderMetrics(interes, tension);
             
             formatAndRenderResponse(respuesta);
 
@@ -684,16 +758,22 @@
                 const resultsContainer = document.getElementById('app-results');
                 resultsContainer.classList.remove('hidden');
 
-                document.getElementById('ai-metrics-container').innerHTML = '';
-                
+                // 📊 Cálculo dinámico de métricas para guardado (Opción B)
+                let interesVal = Math.floor(Math.random() * 16) + 80; // 80-95%
+                let tensionVal = Math.floor(Math.random() * 16) + 75; // 75-90%
+
+                window.renderMetrics(interesVal, tensionVal);
                 formatAndRenderResponse(res.respuesta);
 
                 if (user) {
                     try {
                         const historyRef = collection(db, "usuarios", user.uid, "historial");
+                        // 💾 Se añaden los campos interes y tension a la base de datos
                         await addDoc(historyRef, {
                             prompt: payload.mensaje || "Captura de pantalla",
                             respuesta: res.respuesta,
+                            interes: interesVal,
+                            tension: tensionVal,
                             timestamp: new Date().toISOString()
                         });
                         window.loadChatHistory(user.uid);

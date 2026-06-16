@@ -48,7 +48,7 @@
                 <img src="logo.png" class="w-9 h-9 rounded-full border border-amber-500/30">
                 <span class="text-xl font-black uppercase tracking-tight">Nebula<span class="text-amber-500">.ia</span></span>
             </div>
-            <div id="landing-auth-buttons" class="flex gap-2 sm:gap-4">
+            <div class="flex gap-2 sm:gap-4">
                 <button onclick="showView('view-login')" class="text-xs sm:text-sm font-semibold text-zinc-300 px-3 py-2">Iniciar Sesión</button>
                 <button onclick="showView('view-register')" class="gold-gradient text-black text-xs sm:text-sm font-bold px-4 py-2 rounded-xl shadow-lg shadow-amber-500/10">Empezar Gratis</button>
             </div>
@@ -182,7 +182,9 @@
                 </div>
                 <nav class="space-y-1">
                     <div class="text-[10px] text-zinc-600 font-bold uppercase tracking-widest px-2 mb-2">Hilos de Conversación</div>
-                    <div class="bg-zinc-900/50 border-l-4 border-amber-500 text-white text-xs p-2.5 rounded-r-xl font-medium">Análisis Actual</div>
+                    <div id="chats-history-list" class="space-y-1 max-h-[60vh] overflow-y-auto pr-1">
+                        <div class="text-[11px] text-zinc-500 px-2 italic">Cargando historial...</div>
+                    </div>
                 </nav>
             </div>
             <div class="border-t border-zinc-900 pt-4 flex items-center justify-between">
@@ -193,12 +195,7 @@
 
         <main class="flex-1 bg-[#060608] flex flex-col min-h-0 overflow-hidden relative">
             <header class="w-full border-b border-zinc-900 p-4 flex items-center justify-between bg-zinc-950/50 backdrop-blur-md shrink-0">
-                <div class="flex items-center gap-3">
-                    <button onclick="showView('view-landing')" class="text-zinc-500 hover:text-amber-500 transition-colors flex items-center" title="Volver al Inicio">
-                        <i class="fa-solid fa-house text-lg"></i>
-                    </button>
-                    <span id="role-indicator" class="text-[10px] uppercase font-bold tracking-widest text-zinc-500 truncate max-w-[60%]">Workspace / Motor Inteligencia Híbrida</span>
-                </div>
+                <span id="role-indicator" class="text-[10px] uppercase font-bold tracking-widest text-zinc-500 truncate max-w-[60%]">Workspace / Motor Inteligencia Híbrida</span>
                 <span class="text-[10px] px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center gap-1.5 font-bold uppercase shrink-0">
                     <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Servidor en Línea
                 </span>
@@ -249,7 +246,7 @@
                         </div>
                         <div class="flex-1 text-[11px] sm:text-xs">
                             <span class="font-bold text-amber-400 block mb-0.5">¡Ups! Te has quedado sin créditos</span>
-                            <span class="text-zinc-300 leading-relaxed">Vuelve en 2 horas para continuar conversando con tu recarga automática, o adquiere un plan premium para descifrar chats ilimitados.</span>
+                            <span class="text-zinc-300 leading-relaxed">Vuelve en 24 horas para continuar conversando con tu recarga automática diaria, o adquiere un plan premium para descifrar chats ilimitados.</span>
                         </div>
                         <button onclick="document.getElementById('credit-warning-banner').classList.add('hidden')" class="text-zinc-500 hover:text-zinc-300 transition pl-1">
                             <i class="fa-solid fa-xmark text-xs"></i>
@@ -293,7 +290,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, setDoc, collection, addDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAEEGchpUa4HNuUt_q59XU_t65AwjwA_KM",
@@ -312,37 +309,15 @@
         const CEO_EMAIL = "edierangulo23@gmail.com"; 
 
         onAuthStateChanged(auth, (user) => {
-            const authButtons = document.getElementById('landing-auth-buttons');
-            const roleIndicator = document.getElementById('role-indicator');
-
             if (user) {
-                if (document.getElementById('user-name')) {
-                    document.getElementById('user-name').innerText = user.displayName || user.email;
-                }
+                document.getElementById('user-name').innerText = user.displayName || user.email;
                 if (user.email === CEO_EMAIL) {
-                    if (roleIndicator) {
-                        roleIndicator.innerHTML = `<span class="text-amber-400 font-black animate-pulse"><i class="fa-solid fa-crown"></i> Nebula CEO Mode</span>`;
-                    }
-                } else {
-                    if (roleIndicator) {
-                        roleIndicator.innerHTML = `Workspace / Motor Inteligencia Híbrida`;
-                    }
-                }
-                if (authButtons) {
-                    authButtons.innerHTML = `
-                        <button onclick="showView('view-app')" class="gold-gradient text-black text-xs sm:text-sm font-bold px-4 py-2 rounded-xl shadow-lg shadow-amber-500/10 flex items-center gap-2">
-                            Ir al Workspace <i class="fa-solid fa-arrow-right"></i>
-                        </button>
-                    `;
+                    document.getElementById('role-indicator').innerHTML = `<span class="text-amber-400 font-black"><i class="fa-solid fa-crown"></i> Nebula CEO Mode</span>`;
                 }
                 showView('view-app');
+                // 🔄 Cargar historial de hilos al autenticar usuario
+                window.loadChatHistory(user.uid);
             } else {
-                if (authButtons) {
-                    authButtons.innerHTML = `
-                        <button onclick="showView('view-login')" class="text-xs sm:text-sm font-semibold text-zinc-300 px-3 py-2">Iniciar Sesión</button>
-                        <button onclick="showView('view-register')" class="gold-gradient text-black text-xs sm:text-sm font-bold px-4 py-2 rounded-xl shadow-lg shadow-amber-500/10">Empezar Gratis</button>
-                    `;
-                }
                 showView('view-landing');
             }
         });
@@ -425,6 +400,72 @@
                 document.getElementById('demo-results').classList.remove('hidden');
                 btn.innerHTML = `<i class="fa-solid fa-check text-black"></i> Análisis Listo`;
             }, 2000);
+        }
+
+        // 🔄 Carga dinámicamente el listado de hilos guardados de Firestore
+        window.loadChatHistory = async function(uid) {
+            const historyContainer = document.getElementById('chats-history-list');
+            if (!historyContainer) return;
+
+            try {
+                const historyRef = collection(db, "usuarios", uid, "historial");
+                const q = query(historyRef, orderBy("timestamp", "desc"));
+                const querySnapshot = await getDocs(q);
+
+                if (querySnapshot.empty) {
+                    historyContainer.innerHTML = `<div class="text-[11px] text-zinc-500 px-2 italic">Sin análisis previos</div>`;
+                    return;
+                }
+
+                let html = '';
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    const rawPrompt = data.prompt || "Captura de pantalla";
+                    const shortPrompt = rawPrompt.length > 20 ? rawPrompt.substring(0, 20) + '...' : rawPrompt;
+                    
+                    // Codificación Base64 segura para evitar conflictos de comillas en el onclick HTML
+                    const safePrompt = btoa(unescape(encodeURIComponent(rawPrompt)));
+                    const safeRes = btoa(unescape(encodeURIComponent(data.respuesta || '')));
+
+                    html += `
+                        <div onclick="window.viewPastChat('${safePrompt}', '${safeRes}', this)" class="chat-history-item text-zinc-400 hover:text-white hover:bg-zinc-900/40 text-xs p-2.5 rounded-xl font-medium cursor-pointer transition-all truncate flex items-center gap-2 border-l-2 border-transparent">
+                            <i class="fa-regular fa-comment text-[10px] text-zinc-600 group-hover:text-amber-500"></i>
+                            <span class="truncate">${shortPrompt}</span>
+                        </div>
+                    `;
+                });
+                historyContainer.innerHTML = html;
+            } catch (e) {
+                console.error("Error al cargar historial:", e);
+                historyContainer.innerHTML = `<div class="text-[11px] text-rose-500/70 px-2">Error al cargar hilos</div>`;
+            }
+        }
+
+        // 🔄 Inyecta y renderiza instantáneamente un análisis pasado al darle click en la barra de navegación
+        window.viewPastChat = function(base64Prompt, base64Res, element) {
+            document.querySelectorAll('.chat-history-item').forEach(el => {
+                el.classList.remove('bg-zinc-900/50', 'border-amber-500', 'text-white');
+                el.classList.add('text-zinc-400', 'border-transparent');
+            });
+            
+            element.classList.add('bg-zinc-900/50', 'border-amber-500', 'text-white');
+            element.classList.remove('text-zinc-400', 'border-transparent');
+
+            const prompt = decodeURIComponent(escape(atob(base64Prompt)));
+            const respuesta = decodeURIComponent(escape(atob(base64Res)));
+
+            document.getElementById('app-initial').classList.add('hidden');
+            document.getElementById('ai-loading-skeleton').classList.add('hidden');
+            
+            const resultsContainer = document.getElementById('app-results');
+            resultsContainer.classList.remove('hidden');
+            document.getElementById('ai-metrics-container').innerHTML = '';
+            
+            formatAndRenderResponse(respuesta);
+
+            setTimeout(() => {
+                resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
         }
 
         window.formatAndRenderResponse = function(text) {
@@ -565,26 +606,9 @@
             const docSnap = await getDoc(userRef);
             
             if (docSnap.exists()) {
-                let datos = docSnap.data();
-                const ahora = new Date();
-                const ultimaRecarga = new Date(datos.ultima_recarga || ahora.toISOString());
-                
-                const diferenciaTiempo = ahora - ultimaRecarga;
-                const diferenciaHoras = diferenciaTiempo / (1000 * 60 * 60);
-
-                if (diferenciaHoras >= 2) {
-                    datos.creditos = 7; 
-                    datos.ultima_recarga = ahora.toISOString();
-                    
-                    await setDoc(userRef, datos);
-                    console.log("🔋 Nebula Engine: Créditos restablecidos (Ciclo rápido de 2h).");
-                }
-
+                const datos = docSnap.data();
                 if (datos.creditos > 0) {
-                    await setDoc(userRef, { 
-                        ...datos, 
-                        creditos: datos.creditos - 1 
-                    });
+                    await setDoc(userRef, { ...datos, creditos: datos.creditos - 1 });
                     return true; 
                 }
             }
@@ -601,7 +625,6 @@
                 if (!permitido) {
                     document.getElementById('ai-loading-skeleton').classList.add('hidden');
                     document.getElementById('app-initial').classList.remove('hidden');
-                    
                     document.getElementById('credit-warning-banner').classList.remove('hidden');
                     
                     document.getElementById('main-action-btn').disabled = false;
@@ -625,6 +648,22 @@
                 document.getElementById('ai-metrics-container').innerHTML = '';
                 
                 formatAndRenderResponse(res.respuesta);
+
+                // 🔄 GUARDADO ESTRATÉGICO: Guardamos el hilo en Firestore al recibir el resultado exitoso
+                if (user) {
+                    try {
+                        const historyRef = collection(db, "usuarios", user.uid, "historial");
+                        await addDoc(historyRef, {
+                            prompt: payload.mensaje || "Captura de pantalla",
+                            respuesta: res.respuesta,
+                            timestamp: new Date().toISOString()
+                        });
+                        // Recargar el listado de la barra lateral instantáneamente
+                        window.loadChatHistory(user.uid);
+                    } catch (historyErr) {
+                        console.error("Error al guardar en el historial:", historyErr);
+                    }
+                }
 
                 document.getElementById('mensaje').value = ''; 
                 clearImagePreview(); 

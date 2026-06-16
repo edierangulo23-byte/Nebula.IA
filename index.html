@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Nebula IA - Plataforma Oficial</title>
     
-    <link class="source" icon" type="image/png" href="logo.png">
+    <link rel="icon" type="image/png" href="logo.png">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -249,7 +249,7 @@
                         </div>
                         <div class="flex-1 text-[11px] sm:text-xs">
                             <span class="font-bold text-amber-400 block mb-0.5">¡Ups! Te has quedado sin créditos</span>
-                            <span class="text-zinc-300 leading-relaxed">Vuelve en 24 horas para continuar conversando con tu recarga automática diaria, o adquiere un plan premium para descifrar chats ilimitados.</span>
+                            <span class="text-zinc-300 leading-relaxed">Vuelve en 2 horas para continuar conversando con tu recarga automática, o adquiere un plan premium para descifrar chats ilimitados.</span>
                         </div>
                         <button onclick="document.getElementById('credit-warning-banner').classList.add('hidden')" class="text-zinc-500 hover:text-zinc-300 transition pl-1">
                             <i class="fa-solid fa-xmark text-xs"></i>
@@ -274,7 +274,7 @@
                         </button>
                     </div>
 
-                    <textarea id="mensaje" rows="2" class="w-full bg-transparent p-1 text-sm text-white focus:outline-none placeholder-zinc-700 resize-none font-medium" placeholder="Añade contexto adicional o escribe el text directamente aquí..."></textarea>
+                    <textarea id="mensaje" rows="2" class="w-full bg-transparent p-1 text-sm text-white focus:outline-none placeholder-zinc-700 resize-none font-medium" placeholder="Añade contexto adicional o escribe el texto directamente aquí..."></textarea>
                     
                     <div class="flex items-center justify-between border-t border-zinc-900 pt-2 px-1">
                         <label class="cursor-pointer text-zinc-500 hover:text-amber-500 flex items-center gap-2 text-xs font-semibold select-none py-1">
@@ -565,9 +565,26 @@
             const docSnap = await getDoc(userRef);
             
             if (docSnap.exists()) {
-                const datos = docSnap.data();
+                let datos = docSnap.data();
+                const ahora = new Date();
+                const ultimaRecarga = new Date(datos.ultima_recarga || ahora.toISOString());
+                
+                const diferenciaTiempo = ahora - ultimaRecarga;
+                const diferenciaHoras = diferenciaTiempo / (1000 * 60 * 60);
+
+                if (diferenciaHoras >= 2) {
+                    datos.creditos = 7; 
+                    datos.ultima_recarga = ahora.toISOString();
+                    
+                    await setDoc(userRef, datos);
+                    console.log("🔋 Nebula Engine: Créditos restablecidos (Ciclo rápido de 2h).");
+                }
+
                 if (datos.creditos > 0) {
-                    await setDoc(userRef, { ...datos, creditos: datos.creditos - 1 });
+                    await setDoc(userRef, { 
+                        ...datos, 
+                        creditos: datos.creditos - 1 
+                    });
                     return true; 
                 }
             }
@@ -575,7 +592,6 @@
         }
 
         window.sendToServer = async function(payload) {
-            // Ocultamos el banner de advertencia si existía de un intento fallido anterior
             document.getElementById('credit-warning-banner').classList.add('hidden');
 
             const user = auth.currentUser;
@@ -586,7 +602,6 @@
                     document.getElementById('ai-loading-skeleton').classList.add('hidden');
                     document.getElementById('app-initial').classList.remove('hidden');
                     
-                    // 🚨 MODIFICACIÓN: Activamos el banner nativo elegante integrado sobre los tonos
                     document.getElementById('credit-warning-banner').classList.remove('hidden');
                     
                     document.getElementById('main-action-btn').disabled = false;

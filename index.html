@@ -238,6 +238,19 @@
             <div class="p-2 sm:p-4 bg-zinc-950/90 border-t border-zinc-900 shrink-0" style="padding-bottom: calc(env(safe-area-inset-bottom) + 12px);">
                 <div class="max-w-3xl mx-auto glass-panel rounded-xl p-2 sm:p-3 flex flex-col gap-2 shadow-2xl bg-[#09090b]/95">
                     
+                    <div id="credit-warning-banner" class="hidden flex items-start gap-3 p-3 bg-amber-500/10 border border-amber-500/20 rounded-xl">
+                        <div class="text-amber-400 pt-0.5">
+                            <i class="fa-solid fa-circle-exclamation text-sm"></i>
+                        </div>
+                        <div class="flex-1 text-[11px] sm:text-xs">
+                            <span class="font-bold text-amber-400 block mb-0.5">¡Ups! Te has quedado sin créditos</span>
+                            <span class="text-zinc-300 leading-relaxed">Vuelve en 24 horas para continuar conversando con tu recarga automática diaria, o adquiere un plan premium para descifrar chats ilimitados.</span>
+                        </div>
+                        <button onclick="document.getElementById('credit-warning-banner').classList.add('hidden')" class="text-zinc-500 hover:text-zinc-300 transition pl-1">
+                            <i class="fa-solid fa-xmark text-xs"></i>
+                        </button>
+                    </div>
+
                     <div class="flex flex-col gap-1 border-b border-zinc-900/80 pb-2">
                         <div class="flex gap-1.5 justify-start overflow-x-auto py-0.5 no-scrollbar flex-nowrap sm:flex-wrap">
                             <button onclick="setTono('gracioso')" id="btn-gracioso" class="tono-btn activo-gold">😂 Gracioso</button>
@@ -533,14 +546,20 @@
         }
 
         window.sendToServer = async function(payload) {
+            // Ocultamos el banner de advertencia si existía de un intento fallido anterior
+            document.getElementById('credit-warning-banner').classList.add('hidden');
+
             const user = auth.currentUser;
 
             if (user && payload.imagen) {
                 const permitido = await consumirCredito(user.uid, user.email);
                 if (!permitido) {
-                    alert("¡Ups! Te has quedado sin créditos para analizar capturas. Recarga para seguir descifrando chats.");
                     document.getElementById('ai-loading-skeleton').classList.add('hidden');
                     document.getElementById('app-initial').classList.remove('hidden');
+                    
+                    // 🚨 MODIFICACIÓN: Activamos el banner nativo elegante integrado sobre los tonos
+                    document.getElementById('credit-warning-banner').classList.remove('hidden');
+                    
                     document.getElementById('main-action-btn').disabled = false;
                     document.getElementById('main-action-btn').innerHTML = `Analizar <i class="fa-solid fa-circle-nodes"></i>`;
                     return; 

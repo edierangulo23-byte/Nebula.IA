@@ -145,6 +145,7 @@
         </main>
     </div>
 
+    <!-- 🔑 Formulario de Login -->
     <div id="view-login" class="hidden flex-1 flex items-center justify-center px-4 bg-zinc-950">
         <div class="w-full max-w-md glass-panel p-8 rounded-3xl shadow-2xl">
             <h2 class="text-3xl font-black mb-2 text-white">Bienvenido</h2>
@@ -162,6 +163,7 @@
         </div>
     </div>
 
+    <!-- 📝 Formulario de Registro -->
     <div id="view-register" class="hidden flex-1 flex items-center justify-center px-4 bg-zinc-950">
         <div class="w-full max-w-md glass-panel p-8 rounded-3xl shadow-2xl">
             <h2 class="text-3xl font-black mb-6 text-white">Crea tu cuenta</h2>
@@ -235,7 +237,8 @@
                         <img src="logo.png" class="w-10 h-10 rounded-xl shrink-0 border border-amber-500/20">
                         <div class="space-y-4 w-full">
                             <div class="flex items-center justify-between border-b border-zinc-900 pb-2">
-                                <span class="text-[11px] font-bold text-amber-500 uppercase tracking-widest">Diagnóstico Core Oficial</span>
+                                <!-- ✨ Nombre actualizado con degradado dorado brillante aquí -->
+                                <span class="text-[11px] font-black gold-text uppercase tracking-widest">Análisis Psicológico de Nebula</span>
                             </div>
                             <div id="ai-metrics-container"></div>
                             <div id="ai-response-content" class="space-y-4"></div>
@@ -303,7 +306,7 @@
             apiKey: "AIzaSyAEEGchpUa4HNuUt_q59XU_t65AwjwA_KM",
             authDomain: "nebula-2b57e.firebaseapp.com",
             projectId: "nebula-2b57e",
-            storageBucket: "nebula-2b57e.firebasestorage.app",
+            storageBucket: "nebula-2b57e.firewastorage.app",
             messagingSenderId: "456903759244",
             appId: "1:456903759244:web:5d939ac48b5e5bfa55f2a9"
         };
@@ -361,7 +364,6 @@
             document.getElementById(v).classList.remove('hidden');
         }
 
-        // 🔐 Funciones de Autenticación Reales (Opción A)
         window.loginConEmail = async function() {
             const email = document.getElementById('login-email').value.trim();
             const pass = document.getElementById('login-password').value;
@@ -472,7 +474,6 @@
             }, 2000);
         }
 
-        // 📊 Renderizador de Métricas Dinámicas (Opción B)
         window.renderMetrics = function(interes, tension) {
             const metricsContainer = document.getElementById('ai-metrics-container');
             if(!metricsContainer) return;
@@ -559,9 +560,7 @@
             const resultsContainer = document.getElementById('app-results');
             resultsContainer.classList.remove('hidden');
             
-            // 📊 Recuperación exacta de los porcentajes (Opción B)
             window.renderMetrics(interes, tension);
-            
             formatAndRenderResponse(respuesta);
 
             setTimeout(() => {
@@ -758,9 +757,8 @@
                 const resultsContainer = document.getElementById('app-results');
                 resultsContainer.classList.remove('hidden');
 
-                // 📊 Cálculo dinámico de métricas para guardado (Opción B)
-                let interesVal = Math.floor(Math.random() * 16) + 80; // 80-95%
-                let tensionVal = Math.floor(Math.random() * 16) + 75; // 75-90%
+                let interesVal = Math.floor(Math.random() * 16) + 80; 
+                let tensionVal = Math.floor(Math.random() * 16) + 75; 
 
                 window.renderMetrics(interesVal, tensionVal);
                 formatAndRenderResponse(res.respuesta);
@@ -768,7 +766,6 @@
                 if (user) {
                     try {
                         const historyRef = collection(db, "usuarios", user.uid, "historial");
-                        // 💾 Se añaden los campos interes y tension a la base de datos
                         await addDoc(historyRef, {
                             prompt: payload.mensaje || "Captura de pantalla",
                             respuesta: res.respuesta,

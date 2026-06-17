@@ -748,14 +748,39 @@
             return false; 
         }
 
-        window.sendToServer = async function(payload) {
+       window.sendToServer = async function(payload) {
             document.getElementById('credit-warning-banner').classList.add('hidden');
 
             const user = auth.currentUser;
+            
+            if (!user) {
+                alert("Debes iniciar sesión para analizar conversaciones.");
+                showView('view-login');
+                document.getElementById('ai-loading-skeleton').classList.add('hidden');
+                document.getElementById('app-initial').classList.remove('hidden');
+                document.getElementById('main-action-btn').disabled = false;
+                document.getElementById('main-action-btn').innerHTML = `Analizar <i class="fa-solid fa-circle-nodes"></i>`;
+                return;
+            }
 
-            if (user && payload.imagen) {
-                const permitido = await consumirCredito(user.uid, user.email);
-                if (!permitido) {
+            // 🎟️ AQUÍ PEDIMOS LA MANILLA VIP A FIREBASE
+            const idToken = await user.getIdToken(true);
+
+            try {
+                const req = await fetch('https://nebula-backend-29w7.onrender.com/analizar', {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        // 🛡️ AQUÍ LE MOSTRAMOS LA MANILLA AL PORTERO
+                        'Authorization': `Bearer ${idToken}`
+                    },
+                    body: JSON.stringify(payload)
+                });
+                
+                const res = await req.json();
+                
+                // Si el backend dice que no hay créditos
+                if (res.respuesta && res.respuesta.includes("⚠️ Te has quedado sin créditos")) {
                     document.getElementById('ai-loading-skeleton').classList.add('hidden');
                     document.getElementById('app-initial').classList.remove('hidden');
                     document.getElementById('credit-warning-banner').classList.remove('hidden');
@@ -763,6 +788,50 @@
                     document.getElementById('main-action-btn').disabled = false;
                     document.getElementById('main-action-btn').innerHTML = `Analizar <i class="fa-solid fa-circle-nodes"></i>`;
                     return; 
+                }
+                
+                // Mostrar resultados
+                document.getElementById('ai-loading-skeleton').classList.add('hidden');
+                const resultsContainer = document.getElementById('app-results');
+                resultsContainer.classList.remove('hidden');
+
+                let interesVal = Math.floor(Math.random() * 16) + 80; 
+                let tensionVal = Math.floor(Math.random() * 16) + 75; 
+
+                window.renderMetrics(interesVal, tensionVal);
+                formatAndRenderResponse(res.respuesta);
+
+                // Guardar historial
+                try {
+                    const historyRef = collection(db, "usuarios", user.uid, "historial");
+                    await addDoc(historyRef, {
+                        prompt: payload.mensaje || "Captura de pantalla",
+                        respuesta: res.respuesta,
+                        interes: interesVal,
+                        tension: tensionVal,
+                        timestamp: new Date().toISOString()
+                    });
+                    window.loadChatHistory(user.uid);
+                } catch (historyErr) {
+                    console.error("Error al guardar historial:", historyErr);
+                }
+
+                document.getElementById('mensaje').value = ''; 
+                clearImagePreview(); 
+
+                setTimeout(() => {
+                    resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 150);
+
+            } catch(e) { 
+                alert("Error de comunicación con el servidor central de Nebula."); 
+                document.getElementById('ai-loading-skeleton').classList.add('hidden');
+                document.getElementById('app-initial').classList.remove('hidden');
+            }
+            
+            document.getElementById('main-action-btn').disabled = false;
+            document.getElementById('main-action-btn').innerHTML = `Analizar <i class="fa-solid fa-circle-nodes"></i>`;
+        }
                 }
             }
 

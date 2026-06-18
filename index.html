@@ -695,7 +695,7 @@
             }).catch(err => console.error("Fallo al copiar: ", err));
         }
 
-        window.executeProductionAnalysis = async function() {
+       window.executeProductionAnalysis = async function() {
             const btn = document.getElementById('main-action-btn');
             const textContent = document.getElementById('mensaje').value;
             const fileData = document.getElementById('foto').files[0];
@@ -720,35 +720,7 @@
             } else { sendToServer(payload); }
         }
 
-        async function consumirCredito(uid, email) {
-            if (email === CEO_EMAIL) return true;
-
-            const userRef = doc(db, "usuarios", uid);
-            const docSnap = await getDoc(userRef);
-            
-            if (docSnap.exists()) {
-                let datos = docSnap.data();
-                const ahora = new Date();
-                const ultimaRecarga = new Date(datos.ultima_recarga || ahora.toISOString());
-                
-                const diferenciaTiempo = ahora - ultimaRecarga;
-                const diferenciaHoras = diferenciaTiempo / (1000 * 60 * 60);
-
-                if (diferenciaHoras >= 2) {
-                    datos.creditos = 7; 
-                    datos.ultima_recarga = ahora.toISOString();
-                    await setDoc(userRef, datos);
-                }
-
-                if (datos.creditos > 0) {
-                    await setDoc(userRef, { ...datos, creditos: datos.creditos - 1 });
-                    return true; 
-                }
-            }
-            return false; 
-        }
-
-       window.sendToServer = async function(payload) {
+        window.sendToServer = async function(payload) {
             document.getElementById('credit-warning-banner').classList.add('hidden');
 
             const user = auth.currentUser;
@@ -763,7 +735,7 @@
                 return;
             }
 
-            // 🎟️ AQUÍ PEDIMOS LA MANILLA VIP A FIREBASE
+            // 🎟️ EXTRAEMOS EL ID TOKEN SEGURO DE FIREBASE
             const idToken = await user.getIdToken(true);
 
             try {
@@ -771,7 +743,7 @@
                     method: 'POST',
                     headers: { 
                         'Content-Type': 'application/json',
-                        // 🛡️ AQUÍ LE MOSTRAMOS LA MANILLA AL PORTERO
+                        // 🛡️ ENVIAMOS EL TOKEN EN LAS CABECERAS
                         'Authorization': `Bearer ${idToken}`
                     },
                     body: JSON.stringify(payload)
@@ -779,7 +751,7 @@
                 
                 const res = await req.json();
                 
-                // Si el backend dice que no hay créditos
+                // Si el backend responde con el aviso de falta de créditos
                 if (res.respuesta && res.respuesta.includes("⚠️ Te has quedado sin créditos")) {
                     document.getElementById('ai-loading-skeleton').classList.add('hidden');
                     document.getElementById('app-initial').classList.remove('hidden');
@@ -790,7 +762,7 @@
                     return; 
                 }
                 
-                // Mostrar resultados
+                // Procesar resultados exitosos
                 document.getElementById('ai-loading-skeleton').classList.add('hidden');
                 const resultsContainer = document.getElementById('app-results');
                 resultsContainer.classList.remove('hidden');
@@ -801,7 +773,7 @@
                 window.renderMetrics(interesVal, tensionVal);
                 formatAndRenderResponse(res.respuesta);
 
-                // Guardar historial
+                // Guardar localmente en el historial del cliente
                 try {
                     const historyRef = collection(db, "usuarios", user.uid, "historial");
                     await addDoc(historyRef, {
@@ -813,7 +785,7 @@
                     });
                     window.loadChatHistory(user.uid);
                 } catch (historyErr) {
-                    console.error("Error al guardar historial:", historyErr);
+                    console.error("Error al guardar en el historial:", historyErr);
                 }
 
                 document.getElementById('mensaje').value = ''; 
@@ -824,63 +796,12 @@
                 }, 150);
 
             } catch(e) { 
+                console.error("Error de sincronización:", e);
                 alert("Error de comunicación con el servidor central de Nebula."); 
                 document.getElementById('ai-loading-skeleton').classList.add('hidden');
                 document.getElementById('app-initial').classList.remove('hidden');
             }
             
-            document.getElementById('main-action-btn').disabled = false;
-            document.getElementById('main-action-btn').innerHTML = `Analizar <i class="fa-solid fa-circle-nodes"></i>`;
-        }
-                }
-            }
-
-            try {
-                const req = await fetch('https://nebula-backend-29w7.onrender.com/analizar', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-                const res = await req.json();
-                
-                document.getElementById('ai-loading-skeleton').classList.add('hidden');
-                const resultsContainer = document.getElementById('app-results');
-                resultsContainer.classList.remove('hidden');
-
-                let interesVal = Math.floor(Math.random() * 16) + 80; 
-                let tensionVal = Math.floor(Math.random() * 16) + 75; 
-
-                window.renderMetrics(interesVal, tensionVal);
-                formatAndRenderResponse(res.respuesta);
-
-                if (user) {
-                    try {
-                        const historyRef = collection(db, "usuarios", user.uid, "historial");
-                        await addDoc(historyRef, {
-                            prompt: payload.mensaje || "Captura de pantalla",
-                            respuesta: res.respuesta,
-                            interes: interesVal,
-                            tension: tensionVal,
-                            timestamp: new Date().toISOString()
-                        });
-                        window.loadChatHistory(user.uid);
-                    } catch (historyErr) {
-                        console.error("Error al guardar en el historial:", historyErr);
-                    }
-                }
-
-                document.getElementById('mensaje').value = ''; 
-                clearImagePreview(); 
-
-                setTimeout(() => {
-                    resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }, 150);
-
-            } catch(e) { 
-                alert("Enciende tu servidor backend en Render o local."); 
-                document.getElementById('ai-loading-skeleton').classList.add('hidden');
-                document.getElementById('app-initial').classList.remove('hidden');
-            }
             document.getElementById('main-action-btn').disabled = false;
             document.getElementById('main-action-btn').innerHTML = `Analizar <i class="fa-solid fa-circle-nodes"></i>`;
         }

@@ -695,6 +695,26 @@
             }).catch(err => console.error("Fallo al copiar: ", err));
         }
 
+        // --- MEJORA DE UX: SOPORTE PARA TECLA ENTER ---
+        document.addEventListener("DOMContentLoaded", () => {
+            const inputMensaje = document.getElementById('mensaje');
+            const btnAnalizar = document.getElementById('main-action-btn');
+
+            if (inputMensaje) {
+                inputMensaje.addEventListener('keydown', function(event) {
+                    // Si el usuario presiona Enter y NO está presionando la tecla Shift
+                    if (event.key === 'Enter' && !event.shiftKey) {
+                        event.preventDefault(); // Evita que la caja de texto haga un salto de línea
+                        
+                        // Validamos que el botón no esté deshabilitado para evitar "spam" de envíos
+                        if (btnAnalizar && !btnAnalizar.disabled) {
+                            window.executeProductionAnalysis(); // Dispara el análisis
+                        }
+                    }
+                });
+            }
+        });
+
        window.executeProductionAnalysis = async function() {
             const btn = document.getElementById('main-action-btn');
             const textContent = document.getElementById('mensaje').value;

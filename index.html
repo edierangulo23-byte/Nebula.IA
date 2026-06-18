@@ -145,7 +145,6 @@
         </main>
     </div>
 
-    <!-- 🔑 Formulario de Login -->
     <div id="view-login" class="hidden flex-1 flex items-center justify-center px-4 bg-zinc-950">
         <div class="w-full max-w-md glass-panel p-8 rounded-3xl shadow-2xl">
             <h2 class="text-3xl font-black mb-2 text-white">Bienvenido</h2>
@@ -163,7 +162,6 @@
         </div>
     </div>
 
-    <!-- 📝 Formulario de Registro -->
     <div id="view-register" class="hidden flex-1 flex items-center justify-center px-4 bg-zinc-950">
         <div class="w-full max-w-md glass-panel p-8 rounded-3xl shadow-2xl">
             <h2 class="text-3xl font-black mb-6 text-white">Crea tu cuenta</h2>
@@ -177,7 +175,6 @@
         </div>
     </div>
 
-    <!-- 💻 Aplicación de Escritorio / Workspace -->
     <div id="view-app" class="hidden fixed inset-0 w-full h-[100dvh] flex flex-col md:flex-row overflow-hidden bg-[#030303] z-40">
         <aside class="w-64 bg-black border-r border-zinc-900 hidden md:flex flex-col p-4 justify-between shrink-0">
             <div>
@@ -186,7 +183,6 @@
                     <span class="text-sm font-bold uppercase tracking-wider text-zinc-300 group-hover:text-white transition-colors">Nebula Enterprise</span>
                 </div>
 
-                <!-- ✨ NUEVO BOTÓN: Iniciar Nueva Conversación / Análisis -->
                 <button onclick="window.startNewChat()" class="w-full mb-6 border border-zinc-800 hover:border-amber-500/40 bg-zinc-900/30 hover:bg-zinc-900/70 text-zinc-300 hover:text-white font-bold py-2.5 px-3 rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all duration-200 shadow-sm">
                     <i class="fa-solid fa-plus text-amber-500"></i> Nuevo Análisis
                 </button>
@@ -226,14 +222,16 @@
                     <p class="text-[11px] sm:text-xs text-zinc-500 px-4">Relaciones • Ventas • Networking. Sube tu conversación y decodifica la psicología del chat.</p>
                 </div>
 
-                <div id="ai-loading-skeleton" class="hidden w-full max-w-3xl pt-2 animate-pulse space-y-4">
+                <div id="ai-loading-skeleton" class="hidden w-full max-w-3xl pt-2 space-y-4">
                     <div class="flex gap-4 p-5 rounded-2xl bg-zinc-900/20 border border-zinc-900/60">
-                        <div class="w-10 h-10 bg-zinc-800 rounded-xl shrink-0 border border-zinc-700/30"></div>
+                        <div class="w-10 h-10 bg-zinc-800 rounded-xl shrink-0 border border-zinc-700/30 flex items-center justify-center">
+                            <i class="fa-solid fa-brain text-amber-500/60 animate-bounce"></i>
+                        </div>
                         <div class="space-y-4 w-full">
-                            <div class="h-3 bg-zinc-800 rounded w-1/4"></div>
+                            <div id="loading-status-text" class="text-xs font-black text-amber-400 uppercase tracking-widest transition-all duration-300">Iniciando decodificador...</div>
                             <div class="space-y-2">
-                                <div class="h-3 bg-zinc-800 rounded w-3/4"></div>
-                                <div class="h-3 bg-zinc-800 rounded w-5/6"></div>
+                                <div class="h-2 bg-zinc-800 rounded w-3/4"></div>
+                                <div class="h-2 bg-zinc-800 rounded w-5/6"></div>
                             </div>
                         </div>
                     </div>
@@ -287,7 +285,7 @@
                         </button>
                     </div>
 
-                    <textarea id="mensaje" rows="2" class="w-full bg-transparent p-1 text-sm text-white focus:outline-none placeholder-zinc-700 resize-none font-medium" placeholder="Añade contexto adicional o escribe el texto directamente aquí..."></textarea>
+                    <textarea id="mensaje" rows="2" onkeydown="if(event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); if(!document.getElementById('main-action-btn').disabled) window.executeProductionAnalysis(); }" class="w-full bg-transparent p-1 text-sm text-white focus:outline-none placeholder-zinc-700 resize-none font-medium" placeholder="Añade contexto adicional o escribe el texto directamente aquí..."></textarea>
                     
                     <div class="flex items-center justify-between border-t border-zinc-900 pt-2 px-1">
                         <label class="cursor-pointer text-zinc-500 hover:text-amber-500 flex items-center gap-2 text-xs font-semibold select-none py-1">
@@ -467,7 +465,6 @@
             document.getElementById('file-status').innerText = "Adjuntar Captura";
         }
 
-        // ✨ NUEVA FUNCIÓN: Resetea el área de trabajo limpia para un nuevo análisis
         window.startNewChat = function() {
             document.getElementById('app-results').classList.add('hidden');
             document.getElementById('ai-loading-skeleton').classList.add('hidden');
@@ -563,6 +560,7 @@
             }
         }
 
+        // ✨ MEJORA: Al hacer clic en un chat viejo, carga el prompt en la caja de texto automáticamente
         window.viewPastChat = function(base64Prompt, base64Res, interes, tension, element) {
             document.querySelectorAll('.chat-history-item').forEach(el => {
                 el.classList.remove('bg-zinc-900/50', 'border-amber-500', 'text-white');
@@ -574,6 +572,11 @@
 
             const prompt = decodeURIComponent(escape(atob(base64Prompt)));
             const respuesta = decodeURIComponent(escape(atob(base64Res)));
+
+            // Rellenar textarea automáticamente (Si no es una imagen pura)
+            if(prompt !== "Captura de pantalla") {
+                document.getElementById('mensaje').value = prompt;
+            }
 
             document.getElementById('app-initial').classList.add('hidden');
             document.getElementById('ai-loading-skeleton').classList.add('hidden');
@@ -695,26 +698,6 @@
             }).catch(err => console.error("Fallo al copiar: ", err));
         }
 
-        // --- MEJORA DE UX: SOPORTE PARA TECLA ENTER ---
-        document.addEventListener("DOMContentLoaded", () => {
-            const inputMensaje = document.getElementById('mensaje');
-            const btnAnalizar = document.getElementById('main-action-btn');
-
-            if (inputMensaje) {
-                inputMensaje.addEventListener('keydown', function(event) {
-                    // Si el usuario presiona Enter y NO está presionando la tecla Shift
-                    if (event.key === 'Enter' && !event.shiftKey) {
-                        event.preventDefault(); // Evita que la caja de texto haga un salto de línea
-                        
-                        // Validamos que el botón no esté deshabilitado para evitar "spam" de envíos
-                        if (btnAnalizar && !btnAnalizar.disabled) {
-                            window.executeProductionAnalysis(); // Dispara el análisis
-                        }
-                    }
-                });
-            }
-        });
-
        window.executeProductionAnalysis = async function() {
             const btn = document.getElementById('main-action-btn');
             const textContent = document.getElementById('mensaje').value;
@@ -729,18 +712,42 @@
             document.getElementById('app-results').classList.add('hidden');
             document.getElementById('ai-loading-skeleton').classList.remove('hidden');
 
+            // ✨ MEJORA: Sistema de rotación de frases psicológicas de carga
+            const loadingPhrases = [
+                "🔮 EXAMINANDO SEÑALES DE INTERÉS...",
+                "🧠 LEYENDO SUBCONTEXTO PSICOLÓGICO...",
+                "🛡️ CALIBRANDO RESPUESTAS DE ALTO IMPACTO...",
+                "📊 ANALIZANDO PATRONES CONDUCTUALES...",
+                "⚡ ENLACE DE INTELIGENCIA HÍBRIDA EN CURSO..."
+            ];
+            let currentPhraseIndex = 0;
+            const statusLabel = document.getElementById('loading-status-text');
+            if(statusLabel) statusLabel.innerText = loadingPhrases[0];
+
+            const loadingInterval = setInterval(() => {
+                currentPhraseIndex = (currentPhraseIndex + 1) % loadingPhrases.length;
+                if(statusLabel) statusLabel.innerText = loadingPhrases[currentPhraseIndex];
+            }, 2500);
+
             let payload = { mensaje: textContent, tono: tonoSeleccionado };
+            
+            const finalizeAnalysis = () => {
+                clearInterval(loadingInterval); // Detener el intervalo cuando termine
+            };
+
             if (fileData) {
                 const reader = new FileReader();
                 reader.readAsDataURL(fileData);
                 reader.onload = async () => {
                     payload.imagen = reader.result;
-                    sendToServer(payload);
+                    sendToServer(payload, finalizeAnalysis);
                 };
-            } else { sendToServer(payload); }
+            } else { 
+                sendToServer(payload, finalizeAnalysis); 
+            }
         }
 
-        window.sendToServer = async function(payload) {
+        window.sendToServer = async function(payload, callbackOnFinish) {
             document.getElementById('credit-warning-banner').classList.add('hidden');
 
             const user = auth.currentUser;
@@ -748,6 +755,7 @@
             if (!user) {
                 alert("Debes iniciar sesión para analizar conversaciones.");
                 showView('view-login');
+                if(callbackOnFinish) callbackOnFinish();
                 document.getElementById('ai-loading-skeleton').classList.add('hidden');
                 document.getElementById('app-initial').classList.remove('hidden');
                 document.getElementById('main-action-btn').disabled = false;
@@ -755,7 +763,6 @@
                 return;
             }
 
-            // 🎟️ EXTRAEMOS EL ID TOKEN SEGURO DE FIREBASE
             const idToken = await user.getIdToken(true);
 
             try {
@@ -763,15 +770,14 @@
                     method: 'POST',
                     headers: { 
                         'Content-Type': 'application/json',
-                        // 🛡️ ENVIAMOS EL TOKEN EN LAS CABECERAS
                         'Authorization': `Bearer ${idToken}`
                     },
                     body: JSON.stringify(payload)
                 });
                 
                 const res = await req.json();
+                if(callbackOnFinish) callbackOnFinish();
                 
-                // Si el backend responde con el aviso de falta de créditos
                 if (res.respuesta && res.respuesta.includes("⚠️ Te has quedado sin créditos")) {
                     document.getElementById('ai-loading-skeleton').classList.add('hidden');
                     document.getElementById('app-initial').classList.remove('hidden');
@@ -782,7 +788,6 @@
                     return; 
                 }
                 
-                // Procesar resultados exitosos
                 document.getElementById('ai-loading-skeleton').classList.add('hidden');
                 const resultsContainer = document.getElementById('app-results');
                 resultsContainer.classList.remove('hidden');
@@ -793,7 +798,6 @@
                 window.renderMetrics(interesVal, tensionVal);
                 formatAndRenderResponse(res.respuesta);
 
-                // Guardar localmente en el historial del cliente
                 try {
                     const historyRef = collection(db, "usuarios", user.uid, "historial");
                     await addDoc(historyRef, {
@@ -817,6 +821,7 @@
 
             } catch(e) { 
                 console.error("Error de sincronización:", e);
+                if(callbackOnFinish) callbackOnFinish();
                 alert("Error de comunicación con el servidor central de Nebula."); 
                 document.getElementById('ai-loading-skeleton').classList.add('hidden');
                 document.getElementById('app-initial').classList.remove('hidden');

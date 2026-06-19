@@ -347,7 +347,8 @@
                     `;
                 }
                 showView('view-app');
-                window.loadChatHistory(user.uid);
+                // ✨ Corrección 1: Pasar el EMAIL en lugar del UID
+                window.loadChatHistory(user.email);
             } else {
                 if (authButtons) {
                     authButtons.innerHTML = `
@@ -521,13 +522,15 @@
             `;
         }
 
-        window.loadChatHistory = async function(uid) {
+        // ✨ Corrección 2: Función loadChatHistory completamente reescrita para leer desde email y Storage
+        window.loadChatHistory = async function(emailUsuario) {
             const historyContainer = document.getElementById('chats-history-list');
             if (!historyContainer) return;
 
             try {
-                const historyRef = collection(db, "usuarios", uid, "historial");
-                const q = query(historyRef, orderBy("timestamp", "desc"));
+                // Buscamos en "usuarios -> correo -> historial"
+                const historyRef = collection(db, "usuarios", emailUsuario.toLowerCase(), "historial");
+                const q = query(historyRef, orderBy("fecha", "desc"));
                 const querySnapshot = await getDocs(q);
 
                 if (querySnapshot.empty) {
@@ -536,19 +539,22 @@
                 }
 
                 let html = '';
-                querySnapshot.forEach((doc) => {
-                    const data = doc.data();
-                    const rawPrompt = data.prompt || "Captura de pantalla";
+                querySnapshot.forEach((docSnap) => {
+                    const data = docSnap.data();
+                    const id = docSnap.id;
+                    
+                    // Soporte para variables viejas y nuevas del backend
+                    const rawPrompt = data.mensajeUsuario || data.prompt || "Captura analizada";
                     const shortPrompt = rawPrompt.length > 20 ? rawPrompt.substring(0, 20) + '...' : rawPrompt;
                     
-                    const safePrompt = btoa(unescape(encodeURIComponent(rawPrompt)));
-                    const safeRes = btoa(unescape(encodeURIComponent(data.respuesta || '')));
-                    const interes = data.interes || 85; 
-                    const tension = data.tension || 80;
+                    // Si tiene imagen, le ponemos el icono de foto, si no de mensaje
+                    const icon = data.imagenUrl 
+                        ? '<i class="fa-solid fa-image text-[10px] text-amber-500"></i>' 
+                        : '<i class="fa-regular fa-comment text-[10px] text-zinc-600 group-hover:text-amber-500"></i>';
 
                     html += `
-                        <div onclick="window.viewPastChat('${safePrompt}', '${safeRes}', ${interes}, ${tension}, this)" class="chat-history-item text-zinc-400 hover:text-white hover:bg-zinc-900/40 text-xs p-2.5 rounded-xl font-medium cursor-pointer transition-all truncate flex items-center gap-2 border-l-2 border-transparent">
-                            <i class="fa-regular fa-comment text-[10px] text-zinc-600 group-hover:text-amber-500"></i>
+                        <div onclick="window.viewPastChat('${emailUsuario.toLowerCase()}', '${id}', this)" class="chat-history-item text-zinc-400 hover:text-white hover:bg-zinc-900/40 text-xs p-2.5 rounded-xl font-medium cursor-pointer transition-all truncate flex items-center gap-2 border-l-2 border-transparent group">
+                            ${icon}
                             <span class="truncate">${shortPrompt}</span>
                         </div>
                     `;
@@ -560,36 +566,67 @@
             }
         }
 
-        // ✨ MEJORA: Al hacer clic en un chat viejo, carga el prompt en la caja de texto automáticamente
-        window.viewPastChat = function(base64Prompt, base64Res, interes, tension, element) {
+        // ✨ Corrección 3: viewPastChat reescrita para mostrar imagen desde URL en lugar de Base64
+        window.viewPastChat = async function(emailUsuario, docId, element) {
+            // Actualizar diseño del botón seleccionado en la barra lateral
             document.querySelectorAll('.chat-history-item').forEach(el => {
                 el.classList.remove('bg-zinc-900/50', 'border-amber-500', 'text-white');
                 el.classList.add('text-zinc-400', 'border-transparent');
             });
             
-            element.classList.add('bg-zinc-900/50', 'border-amber-500', 'text-white');
-            element.classList.remove('text-zinc-400', 'border-transparent');
-
-            const prompt = decodeURIComponent(escape(atob(base64Prompt)));
-            const respuesta = decodeURIComponent(escape(atob(base64Res)));
-
-            // Rellenar textarea automáticamente (Si no es una imagen pura)
-            if(prompt !== "Captura de pantalla") {
-                document.getElementById('mensaje').value = prompt;
+            if (element) {
+                element.classList.add('bg-zinc-900/50', 'border-amber-500', 'text-white');
+                element.classList.remove('text-zinc-400', 'border-transparent');
             }
 
-            document.getElementById('app-initial').classList.add('hidden');
-            document.getElementById('ai-loading-skeleton').classList.add('hidden');
-            
-            const resultsContainer = document.getElementById('app-results');
-            resultsContainer.classList.remove('hidden');
-            
-            window.renderMetrics(interes, tension);
-            formatAndRenderResponse(respuesta);
+            try {
+                // Buscamos el documento exacto usando su ID en Firebase
+                const docRef = doc(db, "usuarios", emailUsuario, "historial", docId);
+                const docSnap = await getDoc(docRef);
+                
+                if (!docSnap.exists()) return;
+                const data = docSnap.data();
 
-            setTimeout(() => {
-                resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }, 100);
+                const prompt = data.mensajeUsuario || data.prompt || "Captura analizada";
+                const respuesta = data.respuestaNebula || data.respuesta || '';
+                
+                // Generamos interés/tensión random para mantener el efecto gamificado en chats viejos
+                const interes = data.interes || Math.floor(Math.random() * 16) + 80;
+                const tension = data.tension || Math.floor(Math.random() * 16) + 75;
+
+                // Rellenar la caja de texto inferior si había texto escrito
+                if(prompt !== "Captura analizada" && prompt !== "Captura de pantalla") {
+                    document.getElementById('mensaje').value = prompt;
+                } else {
+                    document.getElementById('mensaje').value = '';
+                }
+
+                // 📸 MOSTRAR LA IMAGEN DIRECTO DESDE FIREBASE STORAGE
+                if (data.imagenUrl) {
+                    document.getElementById('preview-img').src = data.imagenUrl;
+                    document.getElementById('image-preview-box').classList.remove('hidden');
+                    document.getElementById('file-status').innerText = "Captura cargada del historial";
+                } else {
+                    window.clearImagePreview();
+                }
+
+                // Mostrar paneles
+                document.getElementById('app-initial').classList.add('hidden');
+                document.getElementById('ai-loading-skeleton').classList.add('hidden');
+                
+                const resultsContainer = document.getElementById('app-results');
+                resultsContainer.classList.remove('hidden');
+                
+                window.renderMetrics(interes, tension);
+                window.formatAndRenderResponse(respuesta);
+
+                setTimeout(() => {
+                    resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 100);
+
+            } catch (error) {
+                console.error("Error cargando el chat específico:", error);
+            }
         }
 
         window.formatAndRenderResponse = function(text) {
@@ -712,7 +749,6 @@
             document.getElementById('app-results').classList.add('hidden');
             document.getElementById('ai-loading-skeleton').classList.remove('hidden');
 
-            // ✨ MEJORA: Sistema de rotación de frases psicológicas de carga
             const loadingPhrases = [
                 "🔮 EXAMINANDO SEÑALES DE INTERÉS...",
                 "🧠 LEYENDO SUBCONTEXTO PSICOLÓGICO...",
@@ -732,7 +768,7 @@
             let payload = { mensaje: textContent, tono: tonoSeleccionado };
             
             const finalizeAnalysis = () => {
-                clearInterval(loadingInterval); // Detener el intervalo cuando termine
+                clearInterval(loadingInterval); 
             };
 
             if (fileData) {
@@ -798,18 +834,10 @@
                 window.renderMetrics(interesVal, tensionVal);
                 formatAndRenderResponse(res.respuesta);
 
-                try {
-                    const historyRef = collection(db, "usuarios", user.uid, "historial");
-                    await addDoc(historyRef, {
-                        prompt: payload.mensaje || "Captura de pantalla",
-                        respuesta: res.respuesta,
-                        interes: interesVal,
-                        tension: tensionVal,
-                        timestamp: new Date().toISOString()
-                    });
-                    window.loadChatHistory(user.uid);
-                } catch (historyErr) {
-                    console.error("Error al guardar en el historial:", historyErr);
+                // ✨ Corrección 4: Removido el guardado manual desde el frontend. 
+                // El backend ya lo guarda seguro con foto. Solo ordenamos recargar la barra.
+                if (user && user.email) {
+                    window.loadChatHistory(user.email);
                 }
 
                 document.getElementById('mensaje').value = ''; 

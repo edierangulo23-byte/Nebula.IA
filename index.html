@@ -304,13 +304,13 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, updateProfile } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc, collection, addDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, setDoc, collection, addDoc, getDocs, query, orderBy, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAEEGchpUa4HNuUt_q59XU_t65AwjwA_KM",
             authDomain: "nebula-2b57e.firebaseapp.com",
             projectId: "nebula-2b57e",
-            storageBucket: "nebula-2b57e.firewastorage.app",
+            storageBucket: "nebula-2b57e.firebasestorage.app", // 🛠️ CORREGIDO: "firewastorage" cambiado a "firebasestorage"
             messagingSenderId: "456903759244",
             appId: "1:456903759244:web:5d939ac48b5e5bfa55f2a9"
         };
@@ -536,8 +536,9 @@
                 }
 
                 let html = '';
-                querySnapshot.forEach((doc) => {
-                    const data = doc.data();
+                querySnapshot.forEach((docSnap) => {
+                    const data = docSnap.data();
+                    const id = docSnap.id;
                     const rawPrompt = data.prompt || "Captura de pantalla";
                     const shortPrompt = rawPrompt.length > 20 ? rawPrompt.substring(0, 20) + '...' : rawPrompt;
                     
@@ -546,10 +547,16 @@
                     const interes = data.interes || 85; 
                     const tension = data.tension || 80;
 
+                    // 🛠️ MEJORA: Añadida la estructura flex-row y el botón de borrado con parada de propagación.
                     html += `
-                        <div onclick="window.viewPastChat('${safePrompt}', '${safeRes}', ${interes}, ${tension}, this)" class="chat-history-item text-zinc-400 hover:text-white hover:bg-zinc-900/40 text-xs p-2.5 rounded-xl font-medium cursor-pointer transition-all truncate flex items-center gap-2 border-l-2 border-transparent">
-                            <i class="fa-regular fa-comment text-[10px] text-zinc-600 group-hover:text-amber-500"></i>
-                            <span class="truncate">${shortPrompt}</span>
+                        <div onclick="window.viewPastChat('${safePrompt}', '${safeRes}', ${interes}, ${tension}, this)" class="chat-history-item group text-zinc-400 hover:text-white hover:bg-zinc-900/40 text-xs p-2.5 rounded-xl font-medium cursor-pointer transition-all flex items-center justify-between gap-2 border-l-2 border-transparent">
+                            <div class="flex items-center gap-2 truncate flex-1">
+                                <i class="fa-regular fa-comment text-[10px] text-zinc-600 group-hover:text-amber-500 shrink-0"></i>
+                                <span class="truncate">${shortPrompt}</span>
+                            </div>
+                            <button onclick="window.deleteChat('${uid}', '${id}', event)" class="opacity-0 group-hover:opacity-100 text-zinc-600 hover:text-rose-500 transition-all p-1 text-[11px] shrink-0" title="Eliminar del historial">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
                         </div>
                     `;
                 });
@@ -559,6 +566,31 @@
                 historyContainer.innerHTML = `<div class="text-[11px] text-rose-500/70 px-2">Error al cargar hilos</div>`;
             }
         }
+
+        // 🗑️ FUNCIÓN DE PRIVACIDAD: Elimina el análisis físico directamente de Cloud Firestore
+        window.deleteChat = async function(uid, docId, event) {
+            event.stopPropagation(); // Evita que se dispare el evento del contenedor (abrir el chat)
+            
+            if (!confirm("🔒 ¿Seguro que quieres eliminar este análisis de tu historial?")) return;
+
+            try {
+                const docRef = doc(db, "usuarios", uid, "historial", docId);
+                await deleteDoc(docRef);
+                
+                // Si el usuario tenía abierto este análisis en pantalla, reseteamos la interfaz
+                document.getElementById('app-results').classList.add('hidden');
+                document.getElementById('app-initial').classList.remove('hidden');
+                document.getElementById('mensaje').value = '';
+                window.clearImagePreview();
+                
+                // Refrescamos de inmediato el menú lateral de hilos
+                window.loadChatHistory(uid);
+                
+            } catch (error) {
+                console.error("Error al eliminar chat:", error);
+                alert("No se pudo eliminar el elemento del servidor central.");
+            }
+        };
 
         // ✨ MEJORA: Al hacer clic en un chat viejo, carga el prompt en la caja de texto automáticamente
         window.viewPastChat = function(base64Prompt, base64Res, interes, tension, element) {

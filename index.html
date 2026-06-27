@@ -206,11 +206,16 @@
                     <button onclick="showView('view-landing')" class="text-zinc-500 hover:text-amber-500 transition-colors flex items-center" title="Ir al inicio">
                         <i class="fa-solid fa-house text-lg"></i>
                     </button>
-                    <span id="role-indicator" class="text-[10px] uppercase font-bold tracking-widest text-zinc-500 truncate max-w-[60%]">Workspace / Motor Inteligencia Híbrida</span>
+                    <span id="role-indicator" class="text-[10px] uppercase font-bold tracking-widest text-zinc-500 truncate max-w-[40%] sm:max-w-[60%]">Workspace / Motor Inteligencia Híbrida</span>
                 </div>
-                <span class="text-[10px] px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center gap-1.5 font-bold uppercase shrink-0">
-                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Servidor en Línea
-                </span>
+                <div class="flex items-center gap-2 shrink-0">
+                    <button onclick="window.toggleFeedbackModal(true)" class="text-[10px] px-3 py-1 rounded-full bg-zinc-900 hover:bg-zinc-800 text-zinc-300 border border-zinc-800 flex items-center gap-1.5 font-bold uppercase transition-all" title="Ayúdanos a mejorar Nebula">
+                        <i class="fa-regular fa-comments text-amber-500"></i> <span class="hidden sm:inline">Habla con nosotros</span><span class="sm:hidden">Feedback</span>
+                    </button>
+                    <span class="text-[10px] px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center gap-1.5 font-bold uppercase">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Servidor en Línea
+                    </span>
+                </div>
             </header>
 
             <div id="chat-scroller" class="flex-1 overflow-y-auto p-4 sm:p-6 flex flex-col items-center space-y-6">
@@ -301,6 +306,40 @@
         </main>
     </div>
 
+    <div id="feedback-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
+        <div class="w-full max-w-md glass-panel p-6 rounded-2xl shadow-2xl relative space-y-4">
+            <button onclick="window.toggleFeedbackModal(false)" class="absolute top-4 right-4 text-zinc-500 hover:text-zinc-300 transition">
+                <i class="fa-solid fa-xmark text-sm"></i>
+            </button>
+            
+            <div class="space-y-1">
+                <h3 class="text-base font-black text-white flex items-center gap-2">
+                    <i class="fa-regular fa-comments text-amber-500"></i> ¿Tienes una idea o encontraste un problema?
+                </h3>
+                <p class="text-xs text-zinc-400 leading-relaxed">
+                    Nebula está creciendo gracias a sus usuarios. Cuéntanos qué mejorarías.
+                </p>
+            </div>
+
+            <textarea id="feedback-mensaje" rows="4" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl p-3 text-sm text-white focus:border-amber-500 outline-none placeholder-zinc-600 resize-none font-medium" placeholder="Escribe aquí tu reporte, sugerencia o experiencia..."></textarea>
+
+            <div class="grid grid-cols-1 gap-2">
+                <button id="feedback-btn-error" onclick="window.enviarFeedbackA_Nebula('error')" class="w-full bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 hover:border-rose-500/30 text-left text-xs font-bold p-3 rounded-xl flex items-center justify-between text-zinc-300 transition-all">
+                    <span>🐞 Reportar error</span>
+                    <i class="fa-solid fa-chevron-right text-zinc-600 text-[10px]"></i>
+                </button>
+                <button id="feedback-btn-sugerencia" onclick="window.enviarFeedbackA_Nebula('sugerencia')" class="w-full bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 hover:border-amber-500/30 text-left text-xs font-bold p-3 rounded-xl flex items-center justify-between text-zinc-300 transition-all">
+                    <span>💡 Sugerir función</span>
+                    <i class="fa-solid fa-chevron-right text-zinc-600 text-[10px]"></i>
+                </button>
+                <button id="feedback-btn-experiencia" onclick="window.enviarFeedbackA_Nebula('experiencia')" class="w-full bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 hover:border-emerald-500/30 text-left text-xs font-bold p-3 rounded-xl flex items-center justify-between text-zinc-300 transition-all">
+                    <span>⭐ Compartir experiencia</span>
+                    <i class="fa-solid fa-chevron-right text-zinc-600 text-[10px]"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, updateProfile } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
@@ -368,6 +407,78 @@
             document.getElementById(v).classList.remove('hidden');
         }
 
+        window.toggleFeedbackModal = function(show) {
+            const modal = document.getElementById('feedback-modal');
+            if (!modal) return;
+            if (show) {
+                modal.classList.remove('hidden');
+                const text = document.getElementById('feedback-mensaje');
+                if (text) text.value = '';
+            } else {
+                modal.classList.add('hidden');
+            }
+        };
+
+        window.enviarFeedbackA_Nebula = async function(tipo) {
+            const mensajeInput = document.getElementById('feedback-mensaje');
+            const mensaje = mensajeInput ? mensajeInput.value.trim() : '';
+            
+            if (!mensaje) {
+                alert("⚠️ Por favor, escribe un comentario antes de seleccionar una opción.");
+                return;
+            }
+
+            const user = auth.currentUser;
+            if (!user) {
+                alert("Debes iniciar sesión para enviar comentarios.");
+                showView('view-login');
+                window.toggleFeedbackModal(false);
+                return;
+            }
+
+            const btnMap = {
+                'error': 'feedback-btn-error',
+                'sugerencia': 'feedback-btn-sugerencia',
+                'experiencia': 'feedback-btn-experiencia'
+            };
+            const activeBtn = document.getElementById(btnMap[tipo]);
+            const originalHTML = activeBtn ? activeBtn.innerHTML : '';
+            
+            if (activeBtn) {
+                activeBtn.disabled = true;
+                activeBtn.innerHTML = `<span><i class="fa-solid fa-spinner fa-spin mr-1"></i> Enviando...</span>`;
+            }
+
+            try {
+                const idToken = await user.getIdToken(true);
+                const response = await fetch('https://nebula-backend-29w7.onrender.com/feedback', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${idToken}`
+                    },
+                    body: JSON.stringify({ tipo, mensaje })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    alert(data.respuesta || "🚀 ¡Gracias! Recibimos tu mensaje. Nos ayuda muchísimo a mejorar Nebula.");
+                    window.toggleFeedbackModal(false);
+                } else {
+                    alert("❌ Ocurrió un error: " + (data.respuesta || "No se pudo procesar el comentario."));
+                }
+            } catch (error) {
+                console.error("Error al enviar feedback:", error);
+                alert("❌ No se pudo conectar con el servidor central de Nebula.");
+            } finally {
+                if (activeBtn) {
+                    activeBtn.disabled = false;
+                    activeBtn.innerHTML = originalHTML;
+                }
+            }
+        };
+
         window.loginConEmail = async function() {
             const email = document.getElementById('login-email').value.trim();
             const pass = document.getElementById('login-password').value;
@@ -383,12 +494,14 @@
         window.registrarConEmail = async function() {
             const name = document.getElementById('register-name').value.trim();
             const email = document.getElementById('register-email').value.trim();
-            const pass = document.getElementById('register-password').value;
-            if(!name || !email || !pass) return alert("Por favor, completa todos los campos.");
-            if(pass.length < 6) return alert("La contraseña debe tener al menos 6 caracteres.");
+            const pass = document.getElementById('login-password') ? "" : document.getElementById('register-password').value; 
+            // Nota de consistencia interna para resguardo de inputs
+            const realPass = document.getElementById('register-password').value;
+            if(!name || !email || !realPass) return alert("Por favor, completa todos los campos.");
+            if(realPass.length < 6) return alert("La contraseña debe tener al menos 6 caracteres.");
 
             try {
-                const result = await createUserWithEmailAndPassword(auth, email, pass);
+                const result = await createUserWithEmailAndPassword(auth, email, realPass);
                 await updateProfile(result.user, { displayName: name });
                 
                 const userRef = doc(db, "usuarios", result.user.uid);
@@ -547,7 +660,6 @@
                     const interes = data.interes || 85; 
                     const tension = data.tension || 80;
 
-                    // 🛠️ MEJORA: Añadida la estructura flex-row y el botón de borrado con parada de propagación.
                     html += `
                         <div onclick="window.viewPastChat('${safePrompt}', '${safeRes}', ${interes}, ${tension}, this)" class="chat-history-item group text-zinc-400 hover:text-white hover:bg-zinc-900/40 text-xs p-2.5 rounded-xl font-medium cursor-pointer transition-all flex items-center justify-between gap-2 border-l-2 border-transparent">
                             <div class="flex items-center gap-2 truncate flex-1">
@@ -567,9 +679,8 @@
             }
         }
 
-        // 🗑️ FUNCIÓN DE PRIVACIDAD: Elimina el análisis físico directamente de Cloud Firestore
         window.deleteChat = async function(uid, docId, event) {
-            event.stopPropagation(); // Evita que se dispare el evento del contenedor (abrir el chat)
+            event.stopPropagation(); 
             
             if (!confirm("🔒 ¿Seguro que quieres eliminar este análisis de tu historial?")) return;
 
@@ -577,13 +688,11 @@
                 const docRef = doc(db, "usuarios", uid, "historial", docId);
                 await deleteDoc(docRef);
                 
-                // Si el usuario tenía abierto este análisis en pantalla, reseteamos la interfaz
                 document.getElementById('app-results').classList.add('hidden');
                 document.getElementById('app-initial').classList.remove('hidden');
                 document.getElementById('mensaje').value = '';
                 window.clearImagePreview();
                 
-                // Refrescamos de inmediato el menú lateral de hilos
                 window.loadChatHistory(uid);
                 
             } catch (error) {
@@ -592,7 +701,6 @@
             }
         };
 
-        // ✨ MEJORA: Al hacer clic en un chat viejo, carga el prompt en la caja de texto automáticamente
         window.viewPastChat = function(base64Prompt, base64Res, interes, tension, element) {
             document.querySelectorAll('.chat-history-item').forEach(el => {
                 el.classList.remove('bg-zinc-900/50', 'border-amber-500', 'text-white');
@@ -605,7 +713,6 @@
             const prompt = decodeURIComponent(escape(atob(base64Prompt)));
             const respuesta = decodeURIComponent(escape(atob(base64Res)));
 
-            // Rellenar textarea automáticamente (Si no es una imagen pura)
             if(prompt !== "Captura de pantalla") {
                 document.getElementById('mensaje').value = prompt;
             }
@@ -744,7 +851,6 @@
             document.getElementById('app-results').classList.add('hidden');
             document.getElementById('ai-loading-skeleton').classList.remove('hidden');
 
-            // ✨ MEJORA: Sistema de rotación de frases psicológicas de carga
             const loadingPhrases = [
                 "🔮 EXAMINANDO SEÑALES DE INTERÉS...",
                 "🧠 LEYENDO SUBCONTEXTO PSICOLÓGICO...",
@@ -764,7 +870,7 @@
             let payload = { mensaje: textContent, tono: tonoSeleccionado };
             
             const finalizeAnalysis = () => {
-                clearInterval(loadingInterval); // Detener el intervalo cuando termine
+                clearInterval(loadingInterval);
             };
 
             if (fileData) {

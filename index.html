@@ -340,21 +340,8 @@
         </div>
     </div>
      
-     Aquí tienes las correcciones exactas en tu archivo `index.html` para resolver ambos problemas.
-
-### Cambios realizados
-
-1. **Historial de mensajes:** Se actualizó `loadChatHistory` para buscar tanto `data.prompt` como `data.mensajeUsuario`, asegurando que cualquier mensaje guardado por el cliente o por el servidor se muestre en la lista.
-2. **Limpieza del campo de texto:** Se modificó `viewPastChat` para que al hacer clic en un chat del historial **no** reescriba el texto en la caja de entrada de mensajes, y se asegura la limpieza de la caja de texto al procesar el análisis.
-
----
-
-### Código corregido (`<script>` en `index.html`)
-
-Reemplaza todo el bloque `<script type="module">` de tu archivo por el siguiente:
-
-```html
-<script type="module">
+     
+    <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, updateProfile } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
     import { getFirestore, doc, getDoc, setDoc, collection, addDoc, getDocs, query, orderBy, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
